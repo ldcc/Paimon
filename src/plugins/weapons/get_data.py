@@ -35,9 +35,9 @@ async def get_weapon(name: str) -> str:
             except:
                 icon = ''
             return i['name'][0] + '\n' + icon + '\n' + str(i['star']) + '★' * i['star'] + weapon_type[
-                i['type']] + '\n' + '1级基础攻击力:' + str(
-                i['basic_attack']) + '\n' + '满级基础攻击力:' + str(i['max_attack']) + '\n' + '满级副属性:' + i[
-                       'max_attribute'] + '\n' + '技能:' + i['skill']
+                i['type']] + '\n' + '1级基础攻击力：' + str(
+                i['basic_attack']) + '\n' + '满级基础攻击力：' + str(i['max_attack']) + '\n' + '满级副属性:' + i[
+                       'max_attribute'] + '\n' + '技能：' + i['skill']
     correct_result = auto_correct(name)
     if len(correct_result) > 1:
         return f"派蒙这里没找到武器{name}，你是要搜索如下的武器吗?\n{montage_result(correct_result)}"

@@ -10,6 +10,13 @@ python = "^3.7"
 nonebot2 = "^2.0.0.a1"
 nb-cli = "^0.1.0"
 nonebot-adapter-cqhttp = "^2.0.0a12"
+Pillow = "^8.2.0"
+xpinyin = "^0.7.6"
+beautifulsoup4 = "^4.9.3"
+lxml = "^4.6.3"
+requests = "^2.25.1"
+MsgPack = "^1.0.2"
+ujson = "^4.0.2"
 
 [tool.poetry.dev-dependencies]
 nonebot-test = "^0.1.0"

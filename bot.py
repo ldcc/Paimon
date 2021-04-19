@@ -8,6 +8,5 @@ nonebot.load_from_toml("pyproject.toml")
 
 app = nonebot.get_asgi()
 
-
 if __name__ == "__main__":
-    nonebot.run(app="Paimon")
+    nonebot.run()

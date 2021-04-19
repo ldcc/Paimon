@@ -10,7 +10,7 @@ resrefre = on_command('刷新素材资源列表', rule=to_me())
 
 @respot.handle()
 async def _(bot, event):
-    res = event.get_message().extract_plain_text().strip()
+    res = event.get_message().strip()
     if res == "":
         return
 
