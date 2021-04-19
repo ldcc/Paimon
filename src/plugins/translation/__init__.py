@@ -1,5 +1,5 @@
 from nonebot import on_command
-from .translation import qiu_qiu_word_translation, qiu_qiu_phrase_translation
+from .translate import word_translation, phrase_translation
 
 qqtrans = on_command("丘丘翻译")
 qqdicts = on_command("丘丘词典")
@@ -8,12 +8,12 @@ qqdicts = on_command("丘丘词典")
 @qqtrans.handle()
 async def _(bot, event):
     txt = event.get_message().extract_plain_text().strip().lower()
-    msg = qiu_qiu_word_translation(txt)
+    msg = word_translation(txt)
     await qqtrans.finish(msg)
 
 
 @qqdicts.handle()
 async def _(bot, event):
     txt = event.get_message().extract_plain_text().strip().lower()
-    msg = qiu_qiu_phrase_translation(txt)
+    msg = phrase_translation(txt)
     await qqtrans.finish(msg)

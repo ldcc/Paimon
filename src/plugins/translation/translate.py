@@ -6,7 +6,7 @@ FILE_PATH = os.path.dirname(__file__)
 QIU_QIU_WORD = {}
 QIU_QIU_PHRASE = {}
 
-with open(os.path.join(FILE_PATH, 'dictionary.json'), 'r', encoding='UTF-8') as f:
+with open(os.path.join(FILE_PATH, 'dict.json'), 'r', encoding='UTF-8') as f:
     data = json.load(f)
     QIU_QIU_WORD = data["word"]
     QIU_QIU_PHRASE = data["phrase"]
@@ -30,7 +30,7 @@ def compare_phrase(phrase):
     return phrase
 
 
-def qiu_qiu_word_translation(txt: str):
+def word_translation(txt: str):
     # 对语句按空格分隔替换单词翻译
     txt_list = txt.split(" ")
     mes = "你查询的的丘丘语意思为：\n"
@@ -49,7 +49,7 @@ def qiu_qiu_word_translation(txt: str):
     return mes
 
 
-def qiu_qiu_phrase_translation(phrase):
+def phrase_translation(phrase):
     # 语句翻译，先看phrase库是不是有匹配的语句
     # 没有的话把单词拆开返回单词的意思
     tra_phrase = compare_phrase(phrase)
