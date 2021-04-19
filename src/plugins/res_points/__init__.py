@@ -14,7 +14,7 @@ async def _(bot, event):
     if res == "":
         return
 
-    msg = get_resource_map_mes(res[:-2])
+    msg = get_resource_map_mes(res[2:])
     await respot.finish(Message(message=msg))
 
 
