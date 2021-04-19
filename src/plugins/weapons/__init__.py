@@ -7,6 +7,6 @@ wea = on_command('武器资料', aliases={'武器查询'})
 
 @wea.handle()
 async def _(bot: Bot, event: Event):
-    name = str(event.get_message()).strip()
+    name = event.get_message().extract_plain_text().strip()
     re = await get_weapon(name)
     await wea.finish(message=Message(re))

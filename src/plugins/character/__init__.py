@@ -7,7 +7,7 @@ chara = on_command('角色资料', aliases={'角色查询'})
 
 @chara.handle()
 async def _(bot: Bot, event: Event):
-    name = str(event.get_message()).strip()
+    name = event.get_message().extract_plain_text().strip()
     re = get_character(name)
     re += await get_mz(name)
     await chara.finish(message=Message(re))
