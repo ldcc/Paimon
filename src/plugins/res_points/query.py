@@ -244,10 +244,9 @@ def get_resource_map_mes(name):
     if not count:
         return f"没有找到 {name} 资源的位置，可能米游社wiki还没更新。"
 
-    mes = f"资源 {name} 的位置如下\n"
-    mes += map.get_cq_cod()
-
-    mes += f"\n\n※ {name} 一共找到 {count} 个位置点\n※ 数据来源于米游社wiki"
+    # mes = f"资源 {name} 的位置如下\n"
+    mes = map.get_cq_cod()
+    mes += f"\n※ {name} 一共找到 {count} 个位置点\n※ 数据来源于米游社wiki"
 
     return mes
 
