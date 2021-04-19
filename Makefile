@@ -1,0 +1,2 @@
+paimon:
+	nb run

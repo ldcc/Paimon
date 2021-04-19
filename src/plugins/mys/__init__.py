@@ -1,7 +1,7 @@
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Event, Bot, Message
 
-from .getImg import draw_pic
+from .get_img import draw_pic
 
 import re
 

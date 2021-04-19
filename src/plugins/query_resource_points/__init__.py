@@ -1,7 +1,7 @@
 from nonebot import on_command, on_endswith
 from nonebot.rule import to_me
-from nonebot.adapters.cqhttp import Event, Bot, Message
-from .query_resource_points import get_resource_map_mes, get_resource_list_mes, up_label_and_point_list
+from nonebot.adapters.cqhttp import Message
+from .query import get_resource_map_mes, get_resource_list_mes, up_label_and_point_list
 
 respot = on_endswith('在哪')
 reslist = on_command('素材资源列表', rule=to_me())

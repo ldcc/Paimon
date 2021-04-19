@@ -3,7 +3,7 @@ import time
 from io import BytesIO
 from base64 import b64encode
 
-from .getData import GetInfo
+from .get_data import GetInfo
 
 
 async def circle_corner(radimg, radii):

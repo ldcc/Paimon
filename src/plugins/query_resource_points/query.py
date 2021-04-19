@@ -129,7 +129,7 @@ def up_label_and_point_list():
 
 
 # def load_resource_type_id():
-#     with open(os.path.join(FILE_PATH,'resource_type_id.json'), 'r', encoding='UTF-8') as f:
+#     with open(os.path.join(FILE_PATH,'resource_id.json'), 'r', encoding='UTF-8') as f:
 #         json_data = json.load(f)
 #         for id in json_data.keys():
 #             data["all_resource_type"][id] = json_data[id]
