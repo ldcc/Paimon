@@ -1,9 +1,9 @@
-from nonebot import on_command, on_endswith
+from nonebot import on_command, on_startswith
 from nonebot.rule import to_me
 from nonebot.adapters.cqhttp import Message
 from .query import get_resource_map_mes, get_resource_list_mes, up_label_and_point_list
 
-respot = on_endswith('在哪')
+respot = on_startswith('哪有')
 reslist = on_command('素材资源列表', rule=to_me())
 resrefre = on_command('刷新素材资源列表', rule=to_me())
 
