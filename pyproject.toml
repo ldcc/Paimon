@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.7"
 nonebot2 = "^2.0.0.a1"
 nb-cli = "^0.1.0"
+nonebot-adapter-cqhttp = "^2.0.0a12"
 
 [tool.poetry.dev-dependencies]
 nonebot-test = "^0.1.0"

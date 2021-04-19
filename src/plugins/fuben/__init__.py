@@ -1,51 +1,59 @@
-from nonebot import on_command
-from nonebot.adapters import Bot, Event
+from datetime import datetime
+from nonebot.adapters.cqhttp import Bot, Event, Message
 from nonebot.rule import to_me
-from nonebot.typing import T_State
+from nonebot import on_command
 
-fuben = on_command("fuben", rule=to_me())
-
-
-@fuben.handle()
-async def handle(bot: Bot, event: Event, state: T_State):
-    args = str(event.get_message()).strip()
-    if args:
-        state["name"] = args
+tf = on_command('天赋', rule=to_me())
+we = on_command('武器', rule=to_me())
+zb = on_command('周本', rule=to_me())
 
 
-@fuben.got("name", prompt="你想查询哪个城市的天气呢？")
-async def got(bot: Bot, state: T_State):
-    name = state["name"]
+@zb.handle()
+async def _(bot: Bot, event: Event):
+    await zb.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/zb.png]'))
 
 
-##########################################
-@on_command('周本', aliases=('龙狼', '龙狼公子'))
-async def zhouben(session: CommandSession):
-    await session.send('[CQ:image,file=file:///E:/program/PaimonBot/awesome/plugins/fuben/zb.png]')
-
-
-@on_command('武器', aliases=('武器本', '武器材料', '武器突破', '今日武器'))
-async def wuqi(session: CommandSession):
-    if datetime.now().isoweekday() == 1 or datetime.now().isoweekday() == 4:
-        await session.send('[CQ:image,file=file:///E:/program/PaimonBot/awesome/plugins/fuben/wq14.png]')
-    elif datetime.now().isoweekday() == 2 or datetime.now().isoweekday() == 5:
-        await session.send('[CQ:image,file=file:///E:/program/PaimonBot/awesome/plugins/fuben/wq25.png]')
-    elif datetime.now().isoweekday() == 3 or datetime.now().isoweekday() == 6:
-        await session.send('[CQ:image,file=file:///E:/program/PaimonBot/awesome/plugins/fuben/wq36.png]')
+@tf.handle()
+async def _(bot: Bot, event: Event):
+    mes = str(event.get_message())
+    if '一' in mes:
+        await tf.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/tf1.png]'))
+    elif '二' in mes:
+        await tf.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/tf2.png]'))
+    elif '三' in mes:
+        await tf.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/tf3.png]'))
+    elif '四' in mes:
+        await tf.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/tf4.png]'))
+    elif '五' in mes:
+        await tf.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/tf5.png]'))
+    elif '六' in mes:
+        await tf.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/tf6.png]'))
     else:
-        await session.send("今天的副本想打什么打什么哦！[CQ:image,file=file:///E:program/PaimonBot/face/face3]")
+        day = str(datetime.now().isoweekday())
+        if day != '7':
+            await tf.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/tf{day}.png]'))
+        else:
+            await tf.finish('今天星期天所有副本都可以刷哦！')
 
 
-@on_command('天赋', aliases=('天赋本', '天赋材料', '今日天赋'))
-async def tianfu(session: CommandSession):
-    if datetime.now().isoweekday() == 1 or datetime.now().isoweekday() == 4:
-        await session.send(
-            '[CQ:image,file=file:///E:/program/PaimonBot/awesome/plugins/fuben/tf14.png]')
-    elif datetime.now().isoweekday() == 2 or datetime.now().isoweekday() == 5:
-        await session.send(
-            '[CQ:image,file=file:///E:/program/PaimonBot/awesome/plugins/fuben/tf25.png]')
-    elif datetime.now().isoweekday() == 3 or datetime.now().isoweekday() == 6:
-        await session.send(
-            '[CQ:image,file=file:///E:/program/PaimonBot/awesome/plugins/fuben/tf36.png]')
+@we.handle()
+async def _(bot: Bot, event: Event):
+    mes = str(event.get_message())
+    if '一' in mes:
+        await we.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/we1.png]'))
+    elif '二' in mes:
+        await we.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/we2.png]'))
+    elif '三' in mes:
+        await we.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/we3.png]'))
+    elif '四' in mes:
+        await we.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/we4.png]'))
+    elif '五' in mes:
+        await we.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/we5.png]'))
+    elif '六' in mes:
+        await we.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/we6.png]'))
     else:
-        await session.send("今天的副本想打什么打什么哦![CQ:image,file=file:///E:program/PaimonBot/face/face3]")
+        day = str(datetime.now().isoweekday())
+        if day != '7':
+            await we.finish(message=Message(f'[CQ:image,file=http://pic.xiaoxuan.xyz:88/image/we{day}.png]'))
+        else:
+            await we.finish('今天星期天所有副本都可以刷哦！')
