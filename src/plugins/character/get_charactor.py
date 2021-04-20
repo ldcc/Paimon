@@ -8,7 +8,7 @@ from xpinyin import Pinyin
 
 
 def nic2name(name):
-    with open(r"./src/data/character/nickname.json", 'r', encoding='utf-8') as f:
+    with open(r'./src/data/character/nickname.json', 'r', encoding='utf-8') as f:
         all = json.load(f)
         f.close()
     for i in all:
@@ -21,7 +21,7 @@ def nic2name(name):
 def get_json(name: str) -> dict:
     name = nic2name(name)
     res = requests.get(f'https://genshin.minigg.cn/?data={name}')
-    soup = bs4.BeautifulSoup(res.text, "lxml").body
+    soup = bs4.BeautifulSoup(res.text, 'lxml').body
     character_json = json.loads(soup.text)
     return character_json
 
@@ -38,18 +38,18 @@ def get_character(name: str) -> str:
         data0 = get_json(nick_name)
         data = data0['角色信息']
         if nick_name == '旅行者':
-            data["简介"] = '无'
+            data['简介'] = '无'
     except:
         correct_result = auto_correct(nick_name)
         if correct_result is None:
-            return f"派蒙这里没找到{name}，可能是派蒙的错，可能是你输入的名字不正确哦。"
+            return f'派蒙这里没找到{name}，可能是派蒙的错，可能是你输入的名字不正确哦。'
         else:
             if len(correct_result) > 1:
-                return f"派蒙这里没找到{name}，你是要搜索如下的角色吗?\n{montage_result(correct_result)}"
+                return f'派蒙这里没找到{name}，你是要搜索如下的角色吗?\n{montage_result(correct_result)}'
             elif len(correct_result) < 1:
-                return f"派蒙这里没找到{name}，可能是派蒙的错，可能是你输入的名字不正确哦。"
+                return f'派蒙这里没找到{name}，可能是派蒙的错，可能是你输入的名字不正确哦。'
             else:
-                return f"派蒙这里没找到{name}，你是要搜索{correct_result[0]}吗"
+                return f'派蒙这里没找到{name}，你是要搜索{correct_result[0]}吗'
 
     result = nick_name + '\n' + get_icon(data0) + '\n'
     result += '称号：' + str(data['称号']) + '\n'
@@ -66,12 +66,12 @@ def get_character(name: str) -> str:
 
 
 async def get_mz(name_mz: str) -> str:
-    name = nic2name(name_mz.replace(" ", ""))
+    name = nic2name(name_mz.replace(' ', ""))
     try:
         data0 = get_json(name)
         data = data0['命之座']
     except:
-        return f"派蒙这没有{name}，可能是官方资料没有该资料，可能是你输入的名字不正确哦。"
+        return f'派蒙这没有{name}，可能是官方资料没有该资料，可能是你输入的名字不正确哦。'
     result = ''
     n = 1
     for key, value in data.items():
@@ -81,9 +81,9 @@ async def get_mz(name_mz: str) -> str:
 
 
 def auto_correct(name: str) -> list:
-    with open(r"./src/data/character/character_index.json", "r", encoding="utf-8") as f:
+    with open(r'./src/data/character/character_index.json', 'r', encoding='utf-8') as f:
         character_index = json.loads(f.read())
-    input_pin_yin_list = Pinyin().get_pinyin(name).split("-")
+    input_pin_yin_list = Pinyin().get_pinyin(name).split('-')
     result_cache = []
     result = []
     for index_name in character_index:
@@ -103,5 +103,5 @@ def auto_correct(name: str) -> list:
 def montage_result(correct_result: list) -> str:
     cause = correct_result[0]
     for i in range(1, len(correct_result)):
-        cause = cause + "\n" + correct_result[i]
+        cause = cause + '\n' + correct_result[i]
     return cause

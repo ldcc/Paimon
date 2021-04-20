@@ -11,7 +11,7 @@ async def circle_corner(radimg, radii):
     draw = ImageDraw.Draw(circle)
     draw.ellipse((0, 0, radii * 2, radii * 2), fill=255)
 
-    radimg = radimg.convert("RGBA")
+    radimg = radimg.convert('RGBA')
     w, h = radimg.size
 
     alpha = Image.new('L', radimg.size, 255)
@@ -25,17 +25,17 @@ async def circle_corner(radimg, radii):
 
 
 def ys_font(size):
-    return ImageFont.truetype(r"./src/data/mys/yuanshen.ttf", size=size, encoding="utf-8")
+    return ImageFont.truetype(r'./src/data/mys/yuanshen.ttf', size=size, encoding='utf-8')
 
 
 async def draw_pic(uid):
     raw_data = await GetInfo(uid)
-    if (raw_data["retcode"] != 0):
-        if (raw_data["retcode"] == 10001):
-            return ("Cookie错误/过期，请重置Cookie")
+    if (raw_data['retcode'] != 0):
+        if (raw_data['retcode'] == 10001):
+            return ('Cookie错误/过期，请重置Cookie')
         return (
-                "Api报错，返回内容为：\r\n"
-                + str(raw_data) + "\r\n出现这种情况可能的UID输入错误 or 不存在"
+                'Api报错，返回内容为：\r\n'
+                + str(raw_data) + '\r\n出现这种情况可能的UID输入错误 or 不存在'
         )
     else:
         pass
@@ -57,8 +57,8 @@ async def draw_pic(uid):
     area = (0, 0, 680, 750)
     img = Image.open(bg_path).crop(area)
     im_blur = img.filter(ImageFilter.GaussianBlur)
-    base_img = Image.new("RGB", img.size, (255, 255, 255))
-    canvas_img = Image.new("RGB", (int(img.size[0] * 0.95), int(img.size[1] * 0.98)), "black")
+    base_img = Image.new('RGB', img.size, (255, 255, 255))
+    canvas_img = Image.new('RGB', (int(img.size[0] * 0.95), int(img.size[1] * 0.98)), 'black')
     paste_box_x = base_img.size[0] - canvas_img.size[0]
     paste_box_y = base_img.size[1] - canvas_img.size[1]
     paste_box = (int(paste_box_x / 2), int(paste_box_y / 2))
@@ -69,30 +69,24 @@ async def draw_pic(uid):
 
     # ava_holder = Image.open(r'./src/data/mys/texture2d/ba.png').resize((200, 200),
     #                                                       Image.BILINEAR)
-    id_img = Image.open(r"./src/data/mys/texture2d/level.png").resize((250, 155),
-                                                                      Image.BILINEAR).convert(
-        "RGBA")
-    # level_img = Image.open(r"./src/data/mys/texture2d/level2.png").resize((180, 180),
+    id_img = Image.open(r'./src/data/mys/texture2d/level.png').resize((250, 155), Image.BILINEAR).convert('RGBA')
+    # level_img = Image.open(r'./src/data/mys/texture2d/level2.png').resize((180, 180),
     #                                                          Image.BILINEAR).convert(
-    #     "RGBA")
-    p1_img = Image.open(r"./src/data/mys/texture2d/p1.png").resize((600, 300),
-                                                                   Image.BILINEAR).convert(
-        "RGBA")
-    ava_img = Image.open(r'./src/data/mys/texture2d/UI_EmotionIcon51.png').resize(
-        (127, 127), Image.BILINEAR)
-    bar = Image.open(r"./src/data/mys/texture2d/bar.png").convert("RGBA").resize((580, 40),
-                                                                                 Image.BILINEAR)
-    wind_img = Image.open(r"./src/data/mys/texture2d/wind.png").convert("RGBA")
-    earth_img = Image.open(r"./src/data/mys/texture2d/earth.png").convert("RGBA")
+    #     'RGBA')
+    p1_img = Image.open(r'./src/data/mys/texture2d/p1.png').resize((600, 300), Image.BILINEAR).convert('RGBA')
+    ava_img = Image.open(r'./src/data/mys/texture2d/UI_EmotionIcon51.png').resize((127, 127), Image.BILINEAR)
+    bar = Image.open(r'./src/data/mys/texture2d/bar.png').convert('RGBA').resize((580, 40), Image.BILINEAR)
+    wind_img = Image.open(r'./src/data/mys/texture2d/wind.png').convert('RGBA')
+    earth_img = Image.open(r'./src/data/mys/texture2d/earth.png').convert('RGBA')
 
-    char1_img = Image.open(char1).convert("RGBA").resize((95, 95), Image.BILINEAR)
-    char2_img = Image.open(char2).convert("RGBA").resize((95, 95), Image.BILINEAR)
-    char3_img = Image.open(char3).convert("RGBA").resize((95, 95), Image.BILINEAR)
-    char4_img = Image.open(char4).convert("RGBA").resize((95, 95), Image.BILINEAR)
-    char5_img = Image.open(char5).convert("RGBA").resize((95, 95), Image.BILINEAR)
-    char6_img = Image.open(char6).convert("RGBA").resize((95, 95), Image.BILINEAR)
+    char1_img = Image.open(char1).convert('RGBA').resize((95, 95), Image.BILINEAR)
+    char2_img = Image.open(char2).convert('RGBA').resize((95, 95), Image.BILINEAR)
+    char3_img = Image.open(char3).convert('RGBA').resize((95, 95), Image.BILINEAR)
+    char4_img = Image.open(char4).convert('RGBA').resize((95, 95), Image.BILINEAR)
+    char5_img = Image.open(char5).convert('RGBA').resize((95, 95), Image.BILINEAR)
+    char6_img = Image.open(char6).convert('RGBA').resize((95, 95), Image.BILINEAR)
 
-    # cover_img = Image.open(r"./src/data/mys/texture2d/cover.png").convert("RGBA").resize(
+    # cover_img = Image.open(r'./src/data/mys/texture2d/cover.png').convert('RGBA').resize(
     #     (105, 105), Image.BILINEAR)
     # ava_rad = await circle_corner(ava_img, 15)
     # img_canvas.paste(ava_holder, (15, 20), ava_holder)
@@ -110,19 +104,19 @@ async def draw_pic(uid):
     img_canvas.paste(char5_img, (440, 540), char5_img)
     img_canvas.paste(char6_img, (540, 540), char6_img)
 
-    # text_draw.text((240, 80), "ABC", 'lightcyan', ys_font(23))
-    text_draw.text((230, 80), 'UID ' + f"{uid}", 'lightcyan', ys_font(25))
-    if uid[0] == "1":
-        text_draw.text((230, 130), '服务器 ' + "天空岛", 'lightcyan', ys_font(25))
+    # text_draw.text((240, 80), 'ABC', 'lightcyan', ys_font(23))
+    text_draw.text((230, 80), 'UID ' + f'{uid}', 'lightcyan', ys_font(25))
+    if uid[0] == '1':
+        text_draw.text((230, 130), '服务器 ' + '天空岛', 'lightcyan', ys_font(25))
     else:
-        text_draw.text((220, 130), '服务器 ' + "世界树", 'lightcyan', ys_font(25))
-    # text_draw.text((520, 90), "55级", (0, 0, 0), ys_font(30))
-    # text_draw.text((510, 125), "世界等级 8", (0, 0, 0), ys_font(18))
+        text_draw.text((220, 130), '服务器 ' + '世界树', 'lightcyan', ys_font(25))
+    # text_draw.text((520, 90), '55级', (0, 0, 0), ys_font(30))
+    # text_draw.text((510, 125), '世界等级 8', (0, 0, 0), ys_font(18))
     #
     wind_num = raw_data['stats']['anemoculus_number']
     earth_num = raw_data['stats']['geoculus_number']
 
-    char_data = raw_data["avatars"]
+    char_data = raw_data['avatars']
     #
     text_draw.text((80, 245), '活跃天数   ' + str(raw_data['stats']['active_day_number']), (0, 0, 0), ys_font(23))
     text_draw.text((80, 285), '成就解锁   ' + str(raw_data['stats']['achievement_number']), (0, 0, 0), ys_font(23))
@@ -151,7 +145,7 @@ async def draw_pic(uid):
     text_draw.text((548, 640),
                    f'{char_data[5]["name"]}\nLv.{str(char_data[5]["level"])}\n好感等级{str(char_data[5]["fetter"])}',
                    'lightcyan', ys_font(17))
-    text_draw.text((55, 715), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' by 晓轩', 'black', ys_font(18))
+    text_draw.text((55, 715), time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + ' by 晓轩', 'black', ys_font(18))
 
     result_buffer = BytesIO()
     img_canvas.save(result_buffer, format='png')

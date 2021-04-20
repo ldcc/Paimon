@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from nonebot.adapters.cqhttp import Bot, Event, Message
+from nonebot.adapters.cqhttp import Message
 from nonebot.rule import to_me
 from nonebot import on_command
 
@@ -12,12 +12,12 @@ we = on_command('武器', rule=to_me())
 
 
 @zb.handle()
-async def _(bot: Bot, event: Event):
+async def _(bot, event):
     await zb.finish(message=Message(f'[CQ:image,file={fuben_uri}/zb.png]'))
 
 
 @tf.handle()
-async def _(bot: Bot, event: Event):
+async def _(bot, event):
     mes = str(event.get_message())
     if '一' in mes:
         await tf.finish(message=Message(f'[CQ:image,file={fuben_uri}/tf1.png]'))
@@ -40,7 +40,7 @@ async def _(bot: Bot, event: Event):
 
 
 @we.handle()
-async def _(bot: Bot, event: Event):
+async def _(bot, event):
     mes = str(event.get_message())
     if '一' in mes:
         await we.finish(message=Message(f'[CQ:image,file={fuben_uri}/we1.png]'))

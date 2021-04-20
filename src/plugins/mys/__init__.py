@@ -12,7 +12,7 @@ query = on_command('查询')
 async def _(bot: Bot, event: Event):
     message = str(event.get_message())
     try:
-        uid = re.findall(r"\d+", message)[0]  # str
+        uid = re.findall(r'\d+', message)[0]  # str
         im = await draw_pic(uid)
         await query.send(Message(f'[CQ:image,file={im}]'))
     except:

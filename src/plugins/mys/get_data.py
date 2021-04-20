@@ -9,7 +9,7 @@ import requests
 from httpx import AsyncClient
 import nonebot
 
-mhyVersion = "2.3.0"
+mhyVersion = '2.3.0'
 cookie_list = nonebot.get_driver().config.myscookie
 
 
@@ -24,20 +24,20 @@ def md5(text):
 
 
 def DSGet():
-    n = "h8w582wxwgqvahcdkpvdhbh2w9casgfl"
+    n = 'h8w582wxwgqvahcdkpvdhbh2w9casgfl'
     i = str(int(time.time()))
     r = ''.join(random.sample(string.ascii_lowercase + string.digits, 6))
-    c = md5("salt=" + n + "&t=" + i + "&r=" + r)
-    return (i + "," + r + "," + c)
+    c = md5('salt=' + n + '&t=' + i + '&r=' + r)
+    return (i + ',' + r + ',' + c)
 
 
-async def GetInfo(Uid, ServerID="cn_gf01"):
+async def GetInfo(Uid, ServerID='cn_gf01'):
     if Uid[0] == '5':
-        ServerID = "cn_qd01"
+        ServerID = 'cn_qd01'
     try:
         async with AsyncClient() as client:
             req = await client.get(
-                url="https://api-takumi.mihoyo.com/game_record/genshin/api/index?server=" + ServerID + "&role_id=" + Uid,
+                url='https://api-takumi.mihoyo.com/game_record/genshin/api/index?server=' + ServerID + '&role_id=' + Uid,
                 headers={
                     'Accept': 'application/json, text/plain, */*',
                     'DS': DSGet(),
@@ -49,10 +49,10 @@ async def GetInfo(Uid, ServerID="cn_gf01"):
                     'Accept-Encoding': 'gzip, deflate',
                     'Accept-Language': 'zh-CN,en-US;q=0.8',
                     'X-Requested-With': 'com.mihoyo.hyperion',
-                    "Cookie": cache_Cookie()})
+                    'Cookie': cache_Cookie()})
             data = json.loads(req.text)
             return data
 
     except:
-        print("访问失败，请重试！")
+        print('访问失败，请重试！')
         sys.exit(1)

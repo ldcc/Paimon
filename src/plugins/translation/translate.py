@@ -8,8 +8,8 @@ QIU_QIU_PHRASE = {}
 
 with open(os.path.join(FILE_PATH, 'dict.json'), 'r', encoding='UTF-8') as f:
     data = json.load(f)
-    QIU_QIU_WORD = data["word"]
-    QIU_QIU_PHRASE = data["phrase"]
+    QIU_QIU_WORD = data['word']
+    QIU_QIU_PHRASE = data['phrase']
 
 
 def compare_words(word):
@@ -32,18 +32,18 @@ def compare_phrase(phrase):
 
 def word_translation(txt: str):
     # 对语句按空格分隔替换单词翻译
-    txt_list = txt.split(" ")
-    mes = "你查询的的丘丘语意思为：\n"
+    txt_list = txt.split(' ')
+    mes = '你查询的的丘丘语意思为：\n'
 
     for word in txt_list:
         tra_word = compare_words(word)
 
         if tra_word == word:
             # 如果是原词表示没有翻译，前后加空格接回语句里
-            if not mes[-1] == " ":
-                mes += " "
+            if not mes[-1] == ' ':
+                mes += ' '
             mes += tra_word
-            mes += " "
+            mes += ' '
         else:
             mes += tra_word
     return mes
@@ -54,17 +54,17 @@ def phrase_translation(phrase):
     # 没有的话把单词拆开返回单词的意思
     tra_phrase = compare_phrase(phrase)
     if tra_phrase != phrase:
-        return f"你查询的的丘丘语意思为：\n{tra_phrase}\n"
+        return f'你查询的的丘丘语意思为：\n{tra_phrase}\n'
 
-    txt_list = phrase.split(" ")
-    mes = "没有查到这句丘丘语,以下是单词的翻译"
+    txt_list = phrase.split(' ')
+    mes = '没有查到这句丘丘语,以下是单词的翻译'
     for word in txt_list:
-        if word == " ":
+        if word == ' ':
             continue
         tra_word = compare_phrase(word)
         if tra_word == word:
-            mes += f"{word} ： 没有这个词的翻译"
+            mes += f'{word} ： 没有这个词的翻译'
         else:
-            mes += f"{word} ： {tra_word}"
+            mes += f'{word} ： {tra_word}'
 
     return mes

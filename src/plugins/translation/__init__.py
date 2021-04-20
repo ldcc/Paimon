@@ -1,8 +1,8 @@
 from nonebot import on_command
 from .translate import word_translation, phrase_translation
 
-qqtrans = on_command("丘丘翻译")
-qqdicts = on_command("丘丘词典")
+qqtrans = on_command('丘丘翻译')
+qqdicts = on_command('丘丘词典')
 
 
 @qqtrans.handle()
