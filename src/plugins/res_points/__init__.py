@@ -20,8 +20,19 @@ async def _(bot, event):
 
 @reslist.handle()
 async def _(bot, event):
-    txt_list = get_resource_list_mes()
-    await reslist.finish(txt_list)
+    mes_list = []
+    txt_list = get_resource_list_mes().split("\n")
+    for txt in txt_list:
+        data = {
+            "type": "node",
+            "data": {
+                "name": "派蒙",
+                "uin": "2385727093",
+                "content": txt
+            }
+        }
+        mes_list.append(data)
+    await bot.send_group_forward_msg(group_id=event.group_id, messages=Message(mes_list))
 
 
 @resrefre.handle()
