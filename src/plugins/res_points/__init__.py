@@ -4,7 +4,7 @@ from nonebot.adapters.cqhttp import Message
 from .query import get_resource_map_mes, get_resource_list_mes, up_label_and_point_list
 
 respot = on_startswith('哪有')
-reslist = on_command('素材资源列表', rule=to_me())
+reslist = on_command('素材资源列表')
 resrefre = on_command('刷新素材资源列表', rule=to_me())
 
 
@@ -20,19 +20,8 @@ async def _(bot, event):
 
 @reslist.handle()
 async def _(bot, event):
-    mes_list = []
-    txt_list = get_resource_list_mes().split("\n")
-    for txt in txt_list:
-        data = {
-            "type": "node",
-            "data": {
-                "name": "派蒙",
-                "uin": "2854196310",
-                "content": txt
-            }
-        }
-        mes_list.append(data)
-    await reslist.finish(str(mes_list))
+    txt_list = get_resource_list_mes()
+    await reslist.finish(txt_list)
 
 
 @resrefre.handle()

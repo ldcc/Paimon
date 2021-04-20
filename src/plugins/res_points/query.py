@@ -236,7 +236,7 @@ def get_resource_map_mes(name):
         up_label_and_point_list()
 
     if not (name in data["can_query_type_list"]):
-        return f"没有 {name} 这种资源。\n发送 原神资源列表 查看所有资源名称"
+        return f"没有 {name} 这种资源。\n发送 素材资源列表 查看所有资源名称"
 
     map = Resource_map(name)
     count = map.get_resource_count()
