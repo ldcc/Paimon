@@ -267,11 +267,6 @@ def get_resource_list_mes():
     mes = '当前资源列表如下：\n'
 
     for resource_type_id in temp.keys():
-
-        if resource_type_id in ['1', '12', '50', '51', '95', '131']:
-            # 在游戏里能查到的数据这里就不列举了，不然消息太长了
-            continue
-
         mes += f'{data["all_resource_type"][resource_type_id]["name"]}：'
         for resource_id in temp[resource_type_id]:
             mes += f'{data["all_resource_type"][resource_id]["name"]}，'
