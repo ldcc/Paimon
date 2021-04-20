@@ -77,7 +77,7 @@ async def get_mz(name_mz: str) -> str:
     for key, value in data.items():
         result += str(n) + ' 命：' + key + ' - ' + str(value['introduction']) + '\n'
         n += 1
-    return '\n' + result
+    return result
 
 
 def auto_correct(name: str) -> list:
