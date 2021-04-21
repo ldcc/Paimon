@@ -9,6 +9,6 @@ upgrade: abort
 	git pull
 	make paimon
 abort:
-	if [ -n pgrep "$(py_prog)" ]; then pkill $(py_prog); fi
+	if [ -n "pgrep $(py_prog)" ]; then pkill $(py_prog); fi
 
 .PHONY: upgrade abort
