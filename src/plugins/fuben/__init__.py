@@ -1,14 +1,13 @@
 from datetime import datetime
 
 from nonebot.adapters.cqhttp import Message
-from nonebot.rule import to_me
 from nonebot import on_command
 
 # fuben_uri = 'https://raw.githubusercontent.com/ldcc/Paimon/master/src/data/fuben'
 
-zb = on_command('周本', rule=to_me())
-tf = on_command('天赋', rule=to_me())
-we = on_command('武器', rule=to_me())
+zb = on_command('周本')
+tf = on_command('天赋本')
+we = on_command('武器本')
 
 
 @zb.handle()
