@@ -12,7 +12,7 @@ async def ghs_pic3(keyword='') -> str:
     async with AsyncClient() as client:
         req_url = "https://api.lolicon.app/setu/"
         params = {"apikey": apikey,
-                  "r18": 1,
+                  "r18": 0,
                   "size1200": 'true',
                   'keyword': keyword,
                   'proxy': proxy
