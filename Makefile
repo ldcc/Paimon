@@ -6,6 +6,7 @@ paimon:
 cqhttp:
 	cd cqhttp && \
 	rm -rf data/leveldb && \
+	chmod +x $(cqhttp) && \
 	./$(cqhttp) > /dev/null 2>&1 &
 upgrade: abort cqhttp
 	git pull
