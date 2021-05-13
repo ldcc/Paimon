@@ -5,7 +5,7 @@ paimon:
 	$(py_prog) bot.py > /dev/null 2>&1 &
 cqhttp:
 	cd cqhttp && \
-	rm -rf data/leveldb \
+	rm -rf data/leveldb && \
 	./$(cqhttp) > /dev/null 2>&1 &
 upgrade: abort cqhttp
 	git pull
