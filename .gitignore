@@ -142,4 +142,5 @@ dmypy.json
 
 .idea/
 cqhttp/data/
-cqhttp/logs
+cqhttp/logs/
+src/plugins/res_points/icon

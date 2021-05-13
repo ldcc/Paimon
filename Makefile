@@ -9,6 +9,7 @@ cqhttp:
 	./$(cqhttp) > /dev/null 2>&1 &
 upgrade: abort cqhttp
 	git pull
+	make abort
 	make paimon
 abort:
 	$(shell if [ -n "pgrep $(py_prog)" ]; then pkill $(py_prog); fi)
