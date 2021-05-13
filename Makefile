@@ -1,9 +1,8 @@
-py_prog=python3.8
+nb=nb
 cqhttp=go-cqhttp
 
 paimon:
-	#nb plugin install nonebot_plugin_apscheduler
-	$(py_prog) bot.py > /dev/null 2>&1 &
+	$(nb) run > /dev/null 2>&1 &
 cqhttp:
 	cd cqhttp && \
 	rm -rf data/leveldb && \
@@ -15,7 +14,7 @@ upgrade: abort cqhttp
 	make cqhttp
 	make paimon
 abort:
-	$(shell if [ -n "pgrep $(py_prog)" ]; then pkill $(py_prog); fi)
+	$(shell if [ -n "pgrep $(nb)" ]; then pkill $(nb); fi)
 	$(shell if [ -n "pgrep $(cqhttp)" ]; then pkill $(cqhttp); fi)
 
 .PHONY: cqhttp upgrade abort
