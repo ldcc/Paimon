@@ -2,6 +2,7 @@ py_prog=python3.8
 cqhttp=go-cqhttp
 
 paimon:
+	#nb plugin install nonebot_plugin_apscheduler
 	$(py_prog) bot.py > /dev/null 2>&1 &
 cqhttp:
 	cd cqhttp && \
@@ -11,6 +12,7 @@ cqhttp:
 upgrade: abort cqhttp
 	git pull
 	make abort
+	make cqhttp
 	make paimon
 abort:
 	$(shell if [ -n "pgrep $(py_prog)" ]; then pkill $(py_prog); fi)

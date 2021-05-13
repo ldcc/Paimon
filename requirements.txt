@@ -1,0 +1,10 @@
+nb-cli
+nonebot2
+nonebot-adapter-cqhttp
+Pillow = "^8.2.0"
+xpinyin = "^0.7.6"
+beautifulsoup4 = "^4.9.3"
+lxml = "^4.6.3"
+requests = "^2.25.1"
+MsgPack = "^1.0.2"
+ujson = "^4.0.2"
