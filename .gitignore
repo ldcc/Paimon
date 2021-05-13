@@ -144,3 +144,6 @@ dmypy.json
 cqhttp/data/
 cqhttp/logs/
 src/plugins/res_points/icon/*.png
+!src/plugins/res_points/icon/0.png
+!src/plugins/res_points/icon/box.png
+!src/plugins/res_points/icon/box_alpha.png
