@@ -10,6 +10,7 @@ cqhttp:
 	./$(cqhttp) > /dev/null 2>&1 &
 upgrade: abort cqhttp
 	git pull
+	python3.8 -m pip install -r requirements.txt
 	make abort
 	make cqhttp
 	make paimon

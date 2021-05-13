@@ -5,8 +5,7 @@ from nonebot import require
 nonebot.init()
 driver = nonebot.get_driver()
 driver.register_adapter('cqhttp', Bot)
-nonebot.load_from_toml('pyproject.toml')
-app = nonebot.get_asgi()
+nonebot.load_plugins("src/plugins")
 bot_me: Bot
 
 
