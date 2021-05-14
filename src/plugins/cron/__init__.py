@@ -2,6 +2,7 @@ import base64
 import os
 
 from nonebot import require, get_driver, Bot
+from nonebot.adapters import Message
 
 driver = get_driver()
 
@@ -39,7 +40,6 @@ async def _():
         groups = await bot_me.get_group_list()
         for g in groups:
             with open(os.path.join(FILE_PATH, '3.j.jpg'), "rb") as j3:
-                encoded_string = base64.b64encode(j3.read())
-                print(encoded_string)
-                print(encoded_string.decode())
-                await bot_me.send_group_msg(group_id='931272376', message='')
+                pic = base64.b64encode(j3.read())
+                message = Message(f'[CQ:image,file=base64://{pic}]')
+                await bot_me.send_group_msg(group_id='931272376', message=message)
