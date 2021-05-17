@@ -10,4 +10,4 @@ async def _(bot: Bot, event: Event):
     name = event.get_message().extract_plain_text().strip()
     re = get_character(name)
     re += await get_mz(name)
-    await chara.finish(message=Message(re))
+    await chara.finish(Message(re))

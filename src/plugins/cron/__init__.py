@@ -1,8 +1,8 @@
 import base64
 import os
 
-from nonebot import require, get_driver, Bot
-from nonebot.adapters import Message
+from nonebot import require, get_driver
+from nonebot.adapters.cqhttp import Bot, Message
 
 driver = get_driver()
 
@@ -33,13 +33,12 @@ async def _():
             await bot_me.send_group_msg(group_id=g['group_id'], message='整点报时咕咕咕')
 
 
-# @scheduler.scheduled_job('cron', hour='15', minute='15')
-@scheduler.scheduled_job('cron', second='*/5')
+@scheduler.scheduled_job('cron', hour='15', minute='*/16')
 async def _():
     if bot_me is not None:
         groups = await bot_me.get_group_list()
         for g in groups:
             with open(os.path.join(FILE_PATH, '3.j.jpg'), "rb") as j3:
-                pic = base64.b64encode(j3.read())
+                pic = base64.b64encode(j3.read()).decode()
                 message = Message(f'[CQ:image,file=base64://{pic}]')
-                await bot_me.send_group_msg(group_id='931272376', message=message)
+                await bot_me.send_group_msg(group_id=g['group_id'], message=message)
