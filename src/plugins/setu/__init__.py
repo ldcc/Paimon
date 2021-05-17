@@ -1,5 +1,6 @@
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Bot, Message, Event
+
 from .getPic import ghs_pic3
 
 setu = on_command('ghs', aliases={'无内鬼', '涩图', '色图'})
@@ -10,5 +11,4 @@ withdraw = on_command('撤回')
 async def _(bot: Bot, event: Event):
     key = str(event.get_message()).strip()
     pic = await ghs_pic3(key)
-    await setu.send('给大佬递图', at_sender=True)
-    await setu.send(message=Message(pic))
+    await setu.finish(message=Message(pic))

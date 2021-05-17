@@ -25,12 +25,12 @@ async def _(bot: Bot):
 scheduler = require('nonebot_plugin_apscheduler').scheduler
 
 
-@scheduler.scheduled_job('cron', hour='*')
-async def _():
-    if bot_me is not None:
-        groups = await bot_me.get_group_list()
-        for g in groups:
-            await bot_me.send_group_msg(group_id=g['group_id'], message='整点报时咕咕咕')
+# @scheduler.scheduled_job('cron', hour='*')
+# async def _():
+#     if bot_me is not None:
+#         groups = await bot_me.get_group_list()
+#         for g in groups:
+#             await bot_me.send_group_msg(group_id=g['group_id'], message='整点报时咕咕咕')
 
 
 @scheduler.scheduled_job('cron', hour='15', minute='*/16')
