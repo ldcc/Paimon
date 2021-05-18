@@ -1,44 +1,40 @@
 import base64
 import os
 
-from nonebot import require, get_driver
+from nonebot import require, get_bots, get_driver
 from nonebot.adapters.cqhttp import Bot, Message
 
 driver = get_driver()
 
-bot_me: Bot = None
+groups = []
+running = False
+count = 0
 FILE_PATH = r'./src/data/cron'
 
 
 @driver.on_bot_connect
 async def _(bot: Bot):
-    global bot_me
-    bot_me = bot
-
-
-@driver.on_bot_disconnect
-async def _(bot: Bot):
-    global bot_me
-    bot_me = None
+    global groups
+    groups = await bot.get_group_list()
 
 
 scheduler = require('nonebot_plugin_apscheduler').scheduler
 
 
-# @scheduler.scheduled_job('cron', hour='*')
-# async def _():
-#     if bot_me is not None:
-#         groups = await bot_me.get_group_list()
-#         for g in groups:
-#             await bot_me.send_group_msg(group_id=g['group_id'], message='整点报时咕咕咕')
-
-
-@scheduler.scheduled_job('cron', hour='15', minute='*/16')
+@scheduler.scheduled_job('cron', hour='15', minute='*/16', max_instances=10)
 async def _():
-    if bot_me is not None:
-        groups = await bot_me.get_group_list()
+    global groups
+    for bot_id, bot in get_bots().items():
         for g in groups:
             with open(os.path.join(FILE_PATH, '3.j.jpg'), "rb") as j3:
                 pic = base64.b64encode(j3.read()).decode()
                 message = Message(f'[CQ:image,file=base64://{pic}]')
-                await bot_me.send_group_msg(group_id=g['group_id'], message=message)
+                await bot.send_group_msg(group_id=g['group_id'], message=message)
+
+
+@scheduler.scheduled_job('cron', hour='*', max_instances=10)
+async def _():
+    global groups
+    for bot_id, bot in get_bots().items():
+        for g in groups:
+            await bot.send_group_msg(group_id=g['group_id'], message='整点报时咕咕咕')
