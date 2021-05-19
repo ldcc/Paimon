@@ -12,13 +12,14 @@ async def ghs_pic3(keyword='') -> str:
         proxy = 'i.pixiv.cat'
     async with AsyncClient() as client:
         req_url = "https://api.lolicon.app/setu/"
-        params = {"apikey": apikey,
-                  "r18": 0,
-                  "size1200": 'true',
-                  'keyword': keyword,
-                  'proxy': proxy
-                  }
-        res = await client.get(req_url, params=params, proxy='')
+        params = {
+            "apikey": apikey,
+            "r18": 0,
+            "size1200": 'true',
+            'keyword': keyword,
+            'proxy': proxy
+        }
+        res = await client.get(req_url, params=params)
         try:
             setu_title = res.json()['data'][0]['title']
             setu_url = res.json()['data'][0]['url']
@@ -26,7 +27,7 @@ async def ghs_pic3(keyword='') -> str:
             setu_pid = res.json()['data'][0]['pid']
             setu_author = res.json()['data'][0]['author']
             pic = "[CQ:image,file=base64://" + base64 + "]"
-            local_img_url = "title:" + setu_title + "pid:" + str(setu_pid) + " 画师:" + setu_author + "\n" + pic
+            local_img_url = "Title: " + setu_title + "\nPid: " + str(setu_pid) + "\n画师:" + setu_author + "\nUrl:" + setu_url + "\n" + pic
             return local_img_url
         except Exception as e:
             print(res.text)
