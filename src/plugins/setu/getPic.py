@@ -1,5 +1,4 @@
 import base64
-from re import findall
 
 import nonebot
 from httpx import AsyncClient
@@ -23,12 +22,11 @@ async def ghs_pic3(keyword='') -> str:
         try:
             setu_title = res.json()['data'][0]['title']
             setu_url = res.json()['data'][0]['url']
-            base64 = await downPic(setu_url)
             setu_pid = res.json()['data'][0]['pid']
             setu_author = res.json()['data'][0]['author']
-            pic = "[CQ:image,file=base64://" + base64 + "]"
-            local_img_url = "Title: " + setu_title + "\nPid: " + str(setu_pid) + "\n画师:" + setu_author + "\nUrl:" + setu_url + "\n" + pic
-            return local_img_url
+            msg = "给大佬递图\n" + "Title: " + setu_title + "\nPid: " + str(setu_pid) + "\n画师:" + setu_author + "\nUrl:"
+            msg += "\n" "[CQ:image,file=base64://" + await down_pic(setu_url) + "]"
+            return msg
         except Exception as e:
             print(res.text)
             print(e)
@@ -38,7 +36,7 @@ async def ghs_pic3(keyword='') -> str:
                 return 'api调用已到达上限'
 
 
-async def downPic(url) -> str:
+async def down_pic(url) -> str:
     async with AsyncClient() as client:
         headers = {
             'Referer': 'https://accounts.pixiv.net/login?lang=zh&source=pc&view_type=page&ref=wwwtop_accounts_index',
@@ -46,11 +44,8 @@ async def downPic(url) -> str:
                           'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
         }
         re = await client.get(url=url, headers=headers)
-        if re:
-            ba = str(base64.b64encode(re.content))
-            pic = findall(r"\'([^\"]*)\'", ba)[0].replace("'", "")
-            return pic
+        return base64.b64encode(re.content).decode()
 
 
 if __name__ == '__main__':
-    downPic(ghs_pic3())
+    down_pic(ghs_pic3())

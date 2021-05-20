@@ -11,4 +11,9 @@ withdraw = on_command('撤回')
 async def _(bot: Bot, event: Event):
     key = str(event.get_message()).strip()
     pic = await ghs_pic3(key)
-    await setu.finish(message=Message(pic))
+    print(pic)
+    try:
+        await setu.send(message=Message(pic), at_sender=True)
+    except Exception as err:
+        print(err)
+        await setu.send(message=Message('消息被风控，派蒙不背锅'), at_sender=True)
