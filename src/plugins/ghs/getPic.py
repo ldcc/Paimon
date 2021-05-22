@@ -5,13 +5,13 @@ from httpx import AsyncClient
 async def ghs_pic3(keyword='') -> str:
     apikey = nonebot.get_driver().config.apikey
     proxy = 'disable'
-    if nonebot.get_driver().config.setuproxy:
+    if nonebot.get_driver().config.setu_proxy:
         proxy = 'i.pixiv.cat'
     async with AsyncClient() as client:
         req_url = "https://api.lolicon.app/setu/"
         params = {
             "apikey": apikey,
-            "r18": 0,
+            "r18": nonebot.get_driver().config.r18,
             "size1200": 'true',
             'keyword': keyword,
             'proxy': proxy
