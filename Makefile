@@ -5,9 +5,8 @@ paimon: abort-paimon
 	$(nb) run >> logs/$(shell date +"%Y-%m-%d").log 2>&1 &
 cqhttp: abort-cqhttp
 	cd cqhttp && \
-	rm -rf data/leveldb && \
 	chmod +x $(cqhttp) && \
-	./$(cqhttp) > /dev/null 2>&1 &
+	./$(cqhttp) >> logs/$(shell date +"%Y-%m-%d").log 2>&1 &
 upgrade:
 	git pull
 	python3.8 -m pip install -r requirements.txt

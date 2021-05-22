@@ -21,7 +21,7 @@ async def _(bot: Bot):
 scheduler = require('nonebot_plugin_apscheduler').scheduler
 
 
-@scheduler.scheduled_job('cron', hour='15', minute='*/21', max_instances=10)
+@scheduler.scheduled_job('cron', hour='15', minute='*/21', second='0', max_instances=10)
 async def _():
     global groups
     with open(os.path.join(FILE_PATH, '3.j.jpg'), "rb") as j3:
@@ -35,7 +35,7 @@ async def _():
             print(err)
 
 
-@scheduler.scheduled_job('cron', hour='*', max_instances=10)
+@scheduler.scheduled_job('cron', hour='*', minute='0', second='0', max_instances=10)
 async def _():
     global groups
     try:
