@@ -8,6 +8,7 @@ cqhttp: abort-cqhttp
 	chmod +x $(cqhttp) && \
 	./$(cqhttp) >> logs/$(shell date +"%Y-%m-%d").log 2>&1 &
 upgrade:
+	git stash
 	git pull
 	python3.8 -m pip install -r requirements.txt
 	make cqhttp
