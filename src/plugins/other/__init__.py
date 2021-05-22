@@ -14,18 +14,19 @@ flashimg = on_message()
 async def _(bot: Bot, event: GroupRecallNoticeEvent):
     mid = event.message_id
     meg = await bot.get_msg(message_id=mid)
-    if event.user_id != event.self_id and 'type=flash,' not in meg['message']:
-        re = '刚刚说了:' + meg['message'] + '\n不要以为派蒙没看见！'
+    if event.user_id != event.self_id and ',type=flash' not in meg['raw_message']:
+        # if ',type=flash' in meg['raw_message']:
+        #     meg['raw_message'] = meg['raw_message'].replace(',type=flash', '')
+        re = '刚刚说了:\n' + meg['raw_message'] + '\n不要以为派蒙没看见！'
         await recall.finish(message=Message(re), at_sender=True)
 
 
 # 私聊
 @recall.handle()
 async def _(bot: Bot, event: FriendRecallNoticeEvent):
-
-     mid = event.message_id
-     meg = await bot.get_msg(message_id=mid)
-     if event.user_id != event.self_id and 'type=flash,' not in meg['message']:
+    mid = event.message_id
+    meg = await bot.get_msg(message_id=mid)
+    if event.user_id != event.self_id and 'type=flash,' not in meg['message']:
         re = '刚刚说了:' + meg['message'] + '\n不要以为派蒙没看见！'
         await recall.finish(message=Message(re))
 
@@ -44,6 +45,6 @@ async def _poke(bot: Bot, event: PokeNotifyEvent, state: dict) -> None:
 @flashimg.handle()
 async def _(bot: Bot, event: MessageEvent):
     msg = str(event.get_message())
-    if 'type=flash,' in msg:
-        msg = msg.replace('type=flash,', '')
+    if ',type=flash' in msg:
+        msg = msg.replace(',type=flash', '')
         await flashimg.finish(message=Message("不要发闪照，好东西就要分享。" + msg), at_sender=True)
