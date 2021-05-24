@@ -6,13 +6,15 @@ paimon: abort-paimon
 cqhttp: abort-cqhttp
 	cd cqhttp && \
 	chmod +x $(cqhttp) && \
-	./$(cqhttp) >> logs/$(shell date +"%Y-%m-%d").log 2>&1 &
+	./$(cqhttp) > /dev/null 2>&1 &
+start:
+	make cqhttp
+	make paimon
 upgrade:
 	git stash
 	git pull
 	python3.8 -m pip install -r requirements.txt
-	make cqhttp
-	make paimon
+	make start
 
 abort-paimon:
 	$(shell if [ -n "pgrep $(nb)" ]; then sudo pkill $(nb); fi)
@@ -21,4 +23,4 @@ abort-cqhttp:
 
 abort: abort-cqhttp abort-paimon
 
-.PHONY: cqhttp upgrade abort abort-paimon abort-cqhttp
+.PHONY: cqhttp upgrade start abort abort-paimon abort-cqhttp

@@ -1,17 +1,86 @@
-from nonebot import on_notice, on_message
-from nonebot.adapters.cqhttp import GroupRecallNoticeEvent, Bot, Message, FriendRecallNoticeEvent, PokeNotifyEvent, \
-    MessageEvent
+from nonebot import on_notice, on_message, on_command
+from nonebot.adapters.cqhttp import Bot, Message, Event, \
+    GroupRecallNoticeEvent, FriendRecallNoticeEvent, PokeNotifyEvent, MessageEvent
+from nonebot.typing import T_State
 from nonebot.rule import to_me
+from nonebot.permission import SUPERUSER
 from random import choice
+from .getPic import ghs_pic3
 
-poke = on_notice(rule=to_me())
+# permission=SUPERUSER
+switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'})
+switch_off = on_command('功能关闭', aliases={'关闭功能'})
+setu = on_command('setu', aliases={'无内鬼', '涩图', '色图', '瑟图'})
 recall = on_notice()
+poke = on_notice(rule=to_me())
 flashimg = on_message()
 
+switch_map = {'色图': False, '防撤回': True, '戳一戳': True, '偷闪照': True, 'r18': True}
 
-# 群聊
+
+@switch_on.handle()
+async def _(bot: Bot, event: Event, state: T_State):
+    key = str(event.get_message()).strip()
+    if key:
+        state["switch_on"] = key
+
+
+@switch_on.got("switch_on", prompt='请输入要开启的功能：\n1.色图\n2.防撤回\n3.戳一戳\n4.偷闪照\n5.r18')
+async def _(bot: Bot, event: Event, state: T_State):
+    key = state["switch_on"]
+    global switch_map
+    try:
+        if switch_map[key]:
+            await switch_on.finish(f'{key}功能已开启')
+        switch_map[key] = True
+        await switch_on.finish(f'{key}功能启动成功')
+    except _:
+        await switch_on.finish(f'派蒙没有{key}这种功能')
+
+
+@switch_off.handle()
+async def _(bot: Bot, event: Event, state: T_State):
+    key = str(event.get_message()).strip()
+    if key:
+        state["switch_off"] = key
+
+
+@switch_off.got("switch_on", prompt='请输入要关闭的功能：\n1.色图\n2.防撤回\n3.戳一戳\n4.偷闪照\n5.r18')
+async def _(bot: Bot, event: Event, state: T_State):
+    key = state["switch_off"]
+    global switch_map
+    try:
+        if switch_map[key]:
+            await switch_off.finish(f'{key}功能已关闭')
+        switch_map[key] = False
+        await switch_off.finish(f'{key}功能关闭成功')
+    except _:
+        await switch_on.finish(f'派蒙没有{key}这种功能')
+
+
+# 涩图
+@setu.handle()
+async def _(bot: Bot, event: Event):
+    global switch_map
+    if not switch_map['色图']:
+        await setu.finish(message=Message('该功能未开启'))
+        return
+    key = str(event.get_message()).strip()
+    pic = await ghs_pic3(key, switch_map['r18'])
+    try:
+        await setu.send(message=Message(pic))
+    except Exception as err:
+        print(err)
+        await setu.finish(message=Message('消息被风控，派蒙不背锅'))
+
+
+# 群聊撤回
 @recall.handle()
 async def _(bot: Bot, event: GroupRecallNoticeEvent):
+    global switch_map
+    if not switch_map['防撤回']:
+        await recall.finish(message=Message('该功能未开启'))
+        return
     mid = event.message_id
     meg = await bot.get_msg(message_id=mid)
     if event.user_id != event.self_id and ',type=flash' not in meg['raw_message']:
@@ -21,7 +90,7 @@ async def _(bot: Bot, event: GroupRecallNoticeEvent):
         await recall.finish(message=Message(re), at_sender=True)
 
 
-# 私聊
+# 私聊撤回
 @recall.handle()
 async def _(bot: Bot, event: FriendRecallNoticeEvent):
     mid = event.message_id
@@ -31,8 +100,13 @@ async def _(bot: Bot, event: FriendRecallNoticeEvent):
         await recall.finish(message=Message(re))
 
 
+# 戳一戳
 @poke.handle()
-async def _poke(bot: Bot, event: PokeNotifyEvent, state: dict) -> None:
+async def _(bot: Bot, event: PokeNotifyEvent) -> None:
+    global switch_map
+    if not switch_map['戳一戳']:
+        await poke.finish(message=Message('该功能未开启'))
+        return
     msg = choice([
         "你再戳！", "？再戳试试？", "别戳了别戳了再戳就坏了555", "我爪巴爪巴，球球别再戳了", "你戳你🐎呢？！",
         "那...那里...那里不能戳...绝对...", "(。´・ω・)ん?", "有事恁叫我，别天天一个劲戳戳戳！", "欸很烦欸！",
@@ -42,8 +116,13 @@ async def _poke(bot: Bot, event: PokeNotifyEvent, state: dict) -> None:
     await poke.finish(msg, at_sender=True)
 
 
+# 闪照
 @flashimg.handle()
 async def _(bot: Bot, event: MessageEvent):
+    global switch_map
+    if not switch_map['偷闪照']:
+        await flashimg.finish(message=Message('该功能未开启'))
+        return
     msg = str(event.get_message())
     if ',type=flash' in msg:
         msg = msg.replace(',type=flash', '')
