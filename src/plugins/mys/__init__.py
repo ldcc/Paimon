@@ -14,6 +14,6 @@ async def _(bot: Bot, event: Event):
     try:
         uid = re.findall(r'\d+', message)[0]  # str
         im = await draw_pic(uid)
-        await query.finish(Message(f'[CQ:image,file={im}]'))
+        await query.send(Message(f'[CQ:image,file={im}]'))
     except:
         await query.finish(Message('输入错误！'))
