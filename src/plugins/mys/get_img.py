@@ -151,6 +151,3 @@ async def draw_pic(uid):
     img_canvas.save(result_buffer, format='png')
     return 'base64://' + b64encode(result_buffer.getvalue()).decode()
 
-
-if __name__ == '__main__':
-    pass
