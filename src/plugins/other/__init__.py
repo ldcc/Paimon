@@ -53,7 +53,7 @@ async def _(bot: Bot, event: Event, state: T_State):
     key = state["switch_off"]
     global switch_map
     try:
-        if switch_map[key]:
+        if !switch_map[key]:
             await switch_off.finish(f'{key}已经关闭')
     except Exception as err:
         if err != "":
