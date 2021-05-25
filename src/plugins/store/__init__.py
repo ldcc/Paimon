@@ -8,6 +8,7 @@ from nonebot.rule import to_me
 
 save = on_command('记录', rule=to_me())
 load = on_message(rule=to_me())
+list = on_command('圣经', rule=to_me())
 
 
 @save.handle()
@@ -17,6 +18,8 @@ async def _(bot: Bot, event: Event):
         pair = str(event.get_message()).strip().split('\n', 1)
     if len(pair) < 2:
         await save.finish(message=Message('错误的格式'))
+    pair[0] = pair[0].strip()
+    pair[1] = pair[1].strip()
     file = os.path.join(r'./src/data/store', pair[0])
     with open(file, 'w', encoding='utf-8') as f:
         data = base64.b64encode(pair[1].encode()).decode()
@@ -32,3 +35,8 @@ async def _(bot: Bot, event: Event):
         with open(file, 'r', encoding='utf-8') as f:
             data = base64.b64decode(f.read()).decode()
         await save.finish(message=Message(data))
+
+
+@list.handle()
+async def _(bot: Bot, event: Event):
+    pass
