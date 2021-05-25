@@ -34,7 +34,7 @@ async def _(bot: Bot, event: Event, state: T_State):
         if switch_map[key]:
             await switch_on.finish(f'{key}已经开启')
     except Exception as err:
-        if err != "":
+        if str(err) != "":
             await switch_on.finish(f'派蒙没有{key}这种功能')
         else:
             return
@@ -57,7 +57,7 @@ async def _(bot: Bot, event: Event, state: T_State):
         if not switch_map[key]:
             await switch_off.finish(f'{key}已经关闭')
     except Exception as err:
-        if err != "":
+        if str(err) != "":
             await switch_off.finish(f'派蒙没有{key}这种功能')
         else:
             return
