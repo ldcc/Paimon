@@ -1,10 +1,11 @@
+from random import choice
+
 from nonebot import on_notice, on_message, on_command
 from nonebot.adapters.cqhttp import Bot, Message, Event, \
     GroupRecallNoticeEvent, FriendRecallNoticeEvent, PokeNotifyEvent, MessageEvent
-from nonebot.typing import T_State
 from nonebot.rule import to_me
-from nonebot.permission import SUPERUSER
-from random import choice
+from nonebot.typing import T_State
+
 from .getPic import ghs_pic3
 
 # permission=SUPERUSER
@@ -53,13 +54,13 @@ async def _(bot: Bot, event: Event, state: T_State):
     key = state["switch_off"]
     global switch_map
     try:
-        if !switch_map[key]:
+        if not switch_map[key]:
             await switch_off.finish(f'{key}已经关闭')
     except Exception as err:
         if err != "":
             await switch_off.finish(f'派蒙没有{key}这种功能')
         else:
-            return 
+            return
     switch_map[key] = False
     await switch_off.finish(f'{key}关闭成功')
 
