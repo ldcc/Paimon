@@ -70,7 +70,7 @@ async def _(bot: Bot, event: Event, state: T_State):
 async def _(bot: Bot, event: Event):
     global switch_map
     if not switch_map['色图']:
-        await setu.finish(message=Message('该功能未开启'))
+        return
     key = str(event.get_message()).strip()
     pic = await ghs_pic3(key, switch_map['r18'])
     try:
@@ -85,7 +85,7 @@ async def _(bot: Bot, event: Event):
 async def _(bot: Bot, event: GroupRecallNoticeEvent):
     global switch_map
     if not switch_map['防撤回']:
-        await recall.finish(message=Message('该功能未开启'))
+        return
     mid = event.message_id
     meg = await bot.get_msg(message_id=mid)
     if event.user_id != event.self_id and ',type=flash' not in meg['raw_message']:
@@ -110,7 +110,7 @@ async def _(bot: Bot, event: FriendRecallNoticeEvent):
 async def _(bot: Bot, event: PokeNotifyEvent) -> None:
     global switch_map
     if not switch_map['戳一戳']:
-        await poke.finish(message=Message('该功能未开启'))
+        return
     msg = choice([
         "你再戳！", "？再戳试试？", "别戳了别戳了再戳就坏了555", "我爪巴爪巴，球球别再戳了", "你戳你🐎呢？！",
         "那...那里...那里不能戳...绝对...", "(。´・ω・)ん?", "有事恁叫我，别天天一个劲戳戳戳！", "欸很烦欸！",
@@ -124,7 +124,7 @@ async def _(bot: Bot, event: PokeNotifyEvent) -> None:
 async def _(bot: Bot, event: MessageEvent):
     global switch_map
     if not switch_map['偷闪照']:
-        await flashimg.finish(message=Message('该功能未开启'))
+        return
     msg = str(event.get_message())
     if ',type=flash' in msg:
         msg = msg.replace(',type=flash', '')
