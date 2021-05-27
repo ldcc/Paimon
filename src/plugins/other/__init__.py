@@ -6,7 +6,7 @@ from nonebot.adapters.cqhttp import Bot, Message, Event, \
 from nonebot.rule import to_me
 from nonebot.typing import T_State
 
-from .getPic import setu_pic3
+from .get_pic import setu_pic3
 
 # permission=SUPERUSER
 switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'})
