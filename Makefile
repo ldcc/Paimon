@@ -10,10 +10,11 @@ cqhttp: abort-cqhttp
 start:
 	make cqhttp
 	make paimon
-upgrade:
+save:
 	git add src/data/store
 	git commit -m "save stored data"
 	git push
+upgrade: save
 	git pull
 	python3.8 -m pip install -r requirements.txt
 	make start
