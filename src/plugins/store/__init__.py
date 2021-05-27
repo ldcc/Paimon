@@ -6,6 +6,7 @@ from nonebot import on_command, on_message
 from nonebot.adapters.cqhttp.bot import Bot
 from nonebot.adapters.cqhttp import GroupMessageEvent, Message, Event
 from nonebot.rule import to_me
+from nonebot.typing import T_State
 import src.plugins as cfg
 
 keys = on_command('圣经')
@@ -20,28 +21,31 @@ async def _(bot: Bot, event: GroupMessageEvent):
 
 
 @save.handle()
-async def _(bot: Bot, event: Event):
+async def _(bot: Bot, event: Event, state: T_State):
     pair = str(event.get_message()).strip().split(' ', 1)
     if len(pair) < 2:
         pair = str(event.get_message()).strip().split('\n', 1)
-    if len(pair) < 2:
+    if len(pair) == 0:
         await save.finish(message=Message('错误的格式'))
-    pair[0] = pair[0].strip()
-    pair[1] = pair[1].strip()
-    file = os.path.join(r'./src/data/store', pair[0])
-    with open(file, 'w', encoding='utf-8') as f:
-        data = base64.b64encode(pair[1].encode()).decode()
-        f.write(data)
+    if len(pair) < 2:
+        state['instruct'] = pair[0].strip()
+        return
+    state['content'] = pair[1].strip()
+
+
+@save.got('content', prompt='请发送要记录的数据')
+async def _(bot: Bot, event: Event, state: T_State):
+    instruct = state['instruct']
+    content = state['content']
+    file = os.path.join(r'./src/data/store', instruct)
     try:
-        await save.send(message=Message('👌'))
+        with open(file, 'w', encoding='utf-8') as f:
+            data = base64.b64encode(content.encode()).decode()
+            f.write(data)
     except:
         return
-    await cfg.append_ls(pair[0])
-
-
-# @save.got('d', prompt='')
-# async def _(bot: Bot, event: Event):
-#     pass
+    await save.send(message=Message('👌'))
+    await cfg.append_ls(instruct)
 
 
 @load.handle()
