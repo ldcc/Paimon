@@ -23,18 +23,18 @@ switch_map = {'色图': True, '防撤回': True, '戳一戳': True, '偷闪照':
 async def _(bot: Bot, event: Event, state: T_State):
     key = str(event.get_message()).strip()
     if key:
-        state["switch_on"] = key
+        state['switch_on'] = key
 
 
-@switch_on.got("switch_on", prompt='请输入要开启的功能：\n1.色图\n2.防撤回\n3.戳一戳\n4.偷闪照\n5.r18')
+@switch_on.got('switch_on', prompt='请输入要开启的功能：\n1.色图\n2.防撤回\n3.戳一戳\n4.偷闪照\n5.r18')
 async def _(bot: Bot, event: Event, state: T_State):
-    key = state["switch_on"]
+    key = state['switch_on']
     global switch_map
     try:
         if switch_map[key]:
             await switch_on.finish(f'{key}已经开启')
     except Exception as err:
-        if str(err) != "":
+        if str(err) != '':
             await switch_on.finish(f'派蒙没有{key}这种功能')
         else:
             return
@@ -46,12 +46,12 @@ async def _(bot: Bot, event: Event, state: T_State):
 async def _(bot: Bot, event: Event, state: T_State):
     key = str(event.get_message()).strip()
     if key:
-        state["switch_off"] = key
+        state['switch_off'] = key
 
 
-@switch_off.got("switch_off", prompt='请输入要关闭的功能：\n1.色图\n2.防撤回\n3.戳一戳\n4.偷闪照\n5.r18')
+@switch_off.got('switch_off', prompt='请输入要关闭的功能：\n1.色图\n2.防撤回\n3.戳一戳\n4.偷闪照\n5.r18')
 async def _(bot: Bot, event: Event, state: T_State):
-    key = state["switch_off"]
+    key = state['switch_off']
     global switch_map
     try:
         if not switch_map[key]:

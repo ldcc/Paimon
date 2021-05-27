@@ -2,11 +2,11 @@ import base64
 import os
 
 from nonebot import require, get_bots, get_driver
-from nonebot.adapters.cqhttp import Bot, Message
+from nonebot.adapters.cqhttp.bot import Bot
+from nonebot.adapters.cqhttp.message import Message
 
 driver = get_driver()
 
-groups = []
 running = False
 count = 0
 FILE_PATH = r'./src/data/cron'
@@ -17,7 +17,6 @@ async def _(bot: Bot):
     # global groups
     # groups = await bot.get_group_list()
     pass
-
 
 # scheduler = require('nonebot_plugin_apscheduler').scheduler
 #
