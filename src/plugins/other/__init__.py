@@ -6,7 +6,7 @@ from nonebot.adapters.cqhttp import Bot, Message, Event, \
 from nonebot.rule import to_me
 from nonebot.typing import T_State
 
-from .getPic import ghs_pic3
+from .getPic import setu_pic3
 
 # permission=SUPERUSER
 switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'})
@@ -16,7 +16,7 @@ recall = on_notice()
 poke = on_notice(rule=to_me())
 flashimg = on_message()
 
-switch_map = {'色图': False, '防撤回': True, '戳一戳': True, '偷闪照': True, 'r18': False}
+switch_map = {'色图': True, '防撤回': True, '戳一戳': True, '偷闪照': True, 'r18': False}
 
 
 @switch_on.handle()
@@ -72,9 +72,9 @@ async def _(bot: Bot, event: Event):
     if not switch_map['色图']:
         return
     key = str(event.get_message()).strip()
-    pic = await ghs_pic3(key, switch_map['r18'])
+    pic = await setu_pic3(key, switch_map['r18'])
     try:
-        await setu.send(message=Message(pic))
+        await setu.send(message=Message(pic), at_sender=True)
     except Exception as err:
         print(err)
         await setu.finish(message=Message('消息被风控，派蒙不背锅'))
