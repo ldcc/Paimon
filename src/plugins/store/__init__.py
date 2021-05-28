@@ -11,7 +11,7 @@ import src.plugins as cfg
 
 keys = on_command('圣经')
 save = on_command('记录', rule=to_me())
-load = on_message()
+load = on_message(priority=10)
 
 
 @keys.handle()
@@ -25,10 +25,10 @@ async def _(bot: Bot, event: Event, state: T_State):
     pair = str(event.get_message()).strip().split(' ', 1)
     if len(pair) < 2:
         pair = str(event.get_message()).strip().split('\n', 1)
-    if len(pair) == 0:
+    if len(pair) < 1:
         await save.finish(message=Message('错误的格式'))
+    state['instruct'] = pair[0].strip()
     if len(pair) < 2:
-        state['instruct'] = pair[0].strip()
         return
     state['content'] = pair[1].strip()
 
