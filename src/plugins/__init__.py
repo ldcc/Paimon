@@ -53,7 +53,7 @@ async def set_switch(group_id, key, status) -> str:
     try:
         switch_map = group_switcher[group_id]
     except:
-        switch_map = default_switch_map
+        switch_map = default_switch_map.copy()
     try:
         if switch_map[key] == status:
             return f'{key}已经{status_ret}'
@@ -69,7 +69,7 @@ def check_switch(group_id, key) -> dict:
     try:
         switch_map = group_switcher[group_id]
     except:
-        switch_map = default_switch_map
+        switch_map = default_switch_map.copy()
         group_switcher[group_id] = switch_map
     try:
         if switch_map[key]:
