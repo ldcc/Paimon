@@ -1,15 +1,13 @@
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Bot
+import src.plugins as cfg
 
 help = on_command('help', aliases={'帮助'})
 
 
 @help.handle()
 async def _(bot: Bot):
-    await help.finish('1.发送 [武器资料<空格>武器名] 查看武器资料\neg. 武器资料 狼末\n'
-                      '2.发送 [角色资料<空格>角色名] 查看角色资料\neg. 角色资料 琴\n'
-                      '3.发送 [哪有素材名] 查找素材资源在大地图的位置\neg. 哪有甜甜花\n'
-                      '4.发送 [丘丘翻译<空格>丘丘语句] 翻译丘丘语\neg. 丘丘翻译 biadam\n'
-                      '5.发送 [丘丘词典<空格>丘丘语句] 查询丘丘语的单词含义\neg. 丘丘词典 kucha pupu\n'
-                      '6.发送 [色图] 。。。 派蒙坏坏\n'
-                      '7.发送 [功能开启/关闭<空格>功能名] 开启/关闭派蒙的可选功能')
+    await help.finish(f'1.发送 [色图<关键词>] 。。。\n'
+                      f'2.发送 [功能<开启/关闭> 功能名] 开启/关闭{cfg.bot_info["nickname"]}的可选功能\n'
+                      f'3.@{cfg.bot_info["nickname"]} 后发送 [记录 <关键字> <数据>] 记录圣经，当对话中含有关键字时自动触发圣经\n'
+                      f'4.发送 [圣经] 查看所有圣经')

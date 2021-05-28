@@ -8,13 +8,12 @@ from nonebot.adapters.cqhttp.event import GroupMessageEvent, \
 from nonebot.rule import to_me
 from nonebot.typing import T_State
 
-from .get_pic import setu_pic
-from .valid import set_switch, check_switch
+import src.plugins as cfg
 
 # permission=SUPERUSER
+features = '- 色图\n- 防撤回\n- 戳一戳\n- 偷闪照\n'
 switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'})
 switch_off = on_command('功能关闭', aliases={'关闭功能'})
-setu = on_command('setu', aliases={'无内鬼', '涩图', '色图', '瑟图'})
 poke = on_notice(rule=to_me())
 recall = on_notice(priority=10)
 flashimg = on_message(priority=10)
@@ -27,9 +26,9 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         state['switch_on'] = key
 
 
-@switch_on.got('switch_on', prompt='请输入要开启的功能：\n1.色图\n2.防撤回\n3.戳一戳\n4.偷闪照\n5.r18')
+@switch_on.got('switch_on', prompt=f'请输入要开启的功能：\n{features}')
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    ret = await set_switch(event.group_id, state['switch_on'], True)
+    ret = await cfg.set_switch(event.group_id, state['switch_on'], True)
     await switch_on.finish(message=Message(ret))
 
 
@@ -40,31 +39,17 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         state['switch_off'] = key
 
 
-@switch_off.got('switch_off', prompt='请输入要关闭的功能：\n1.色图\n2.防撤回\n3.戳一戳\n4.偷闪照\n5.r18')
+@switch_off.got('switch_off', prompt=f'请输入要关闭的功能：\n{features}')
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    ret = await set_switch(event.group_id, state['switch_off'], False)
+    ret = await cfg.set_switch(event.group_id, state['switch_off'], False)
     await switch_on.finish(message=Message(ret))
 
-
-# 涩图
-@setu.handle()
-async def _(bot: Bot, event: GroupMessageEvent):
-    switch_map = check_switch(event.group_id, '色图')
-    if len(switch_map) == 0:
-        return
-    key = str(event.get_message()).strip()
-    pic = await setu_pic(key, switch_map['r18'])
-    try:
-        await setu.send(message=Message(pic), at_sender=True)
-    except Exception as err:
-        print(err)
-        await setu.finish(message=Message('消息被风控，派蒙不背锅'))
 
 
 # 群聊撤回
 @recall.handle()
 async def _(bot: Bot, event: GroupRecallNoticeEvent):
-    switch_map = check_switch(event.group_id, '防撤回')
+    switch_map = cfg.check_switch(event.group_id, '防撤回')
     if len(switch_map) == 0:
         return
     mid = event.message_id
@@ -87,7 +72,7 @@ async def _(bot: Bot, event: FriendRecallNoticeEvent):
 # 戳一戳
 @poke.handle()
 async def _(bot: Bot, event: PokeNotifyEvent) -> None:
-    switch_map = check_switch(event.group_id, '戳一戳')
+    switch_map = cfg.check_switch(event.group_id, '戳一戳')
     if len(switch_map) == 0:
         return
     msg = choice([
@@ -101,7 +86,7 @@ async def _(bot: Bot, event: PokeNotifyEvent) -> None:
 # 闪照
 @flashimg.handle()
 async def _(bot: Bot, event: GroupMessageEvent):
-    switch_map = check_switch(event.group_id, '偷闪照')
+    switch_map = cfg.check_switch(event.group_id, '偷闪照')
     if len(switch_map) == 0:
         return
     msg = str(event.get_message())
