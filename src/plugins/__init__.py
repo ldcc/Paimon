@@ -5,7 +5,9 @@ from nonebot.adapters.cqhttp.bot import Bot
 
 driver = get_driver()
 bot_info = dict()
-ls = os.listdir(r'./src/data/store')
+ls = []
+apikeys = []
+proxy = False
 
 
 async def append_ls(v):
@@ -15,10 +17,17 @@ async def append_ls(v):
     ls.append(v)
 
 
+async def reset_apikeys_default():
+    global apikeys
+    apikeys = driver.config.apikeys
+
 @driver.on_bot_connect
 async def _(bot: Bot):
-    global bot_info
+    global bot_info, ls, apikeys, proxy
     bot_info = await bot.get_login_info()
+    ls = os.listdir(r'./src/data/store')
+    apikeys = driver.config.apikeys
+    proxy = driver.config.setu_proxy
 
 
 def format_group_message(msgs):

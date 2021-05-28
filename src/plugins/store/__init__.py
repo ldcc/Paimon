@@ -11,7 +11,7 @@ import src.plugins as cfg
 
 keys = on_command('圣经')
 save = on_command('记录', rule=to_me())
-load = on_message()
+load = on_message(priority=10)
 
 
 @keys.handle()

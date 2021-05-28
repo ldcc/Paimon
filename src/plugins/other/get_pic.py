@@ -2,16 +2,27 @@ import base64
 import io
 import random
 
-import nonebot
 from PIL import Image, ImageDraw
 from httpx import AsyncClient
+import src.plugins as cfg
 
 
-async def setu_pic3(keyword='', r18=False) -> str:
-    apikey = nonebot.get_driver().config.apikey
+async def setu_pic(keyword='', r18=False) -> str:
+    pic = ''
+    while len(cfg.apikeys) > 0:
+        apikey = cfg.apikeys.pop(0)
+        pic = await setu_pic3(keyword, r18, apikey)
+        if pic != 'api调用已到达上限':
+            cfg.apikeys.append(apikey)
+            return pic
+    await cfg.reset_apikeys_default()
+    return pic
+
+
+async def setu_pic3(keyword='', r18=False, apikey='') -> str:
     r18 = 1 if r18 else 0
     proxy = 'disable'
-    if nonebot.get_driver().config.setu_proxy:
+    if cfg.proxy:
         proxy = 'i.pixiv.cat'
     async with AsyncClient() as client:
         req_url = "https://api.lolicon.app/setu/"
@@ -36,7 +47,7 @@ async def setu_pic3(keyword='', r18=False) -> str:
             print(res.text)
             print(err)
             if '额度限制' not in res.text:
-                return f"图库中没有搜到关于{keyword}的图。今日额度还剩下{res.json()['quota']}次。"
+                return f"图库中没有搜到关于{keyword}的图。"
             else:
                 return 'api调用已到达上限'
 
