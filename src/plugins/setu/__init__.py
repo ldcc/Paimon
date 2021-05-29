@@ -18,7 +18,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
     key = str(event.get_message()).strip()
     pic = await setu_pic(key, switch_map['r18'], switch_map['proxy'])
     try:
-        await setu.send(message=Message(pic), at_sender=True)
+        await setu.send(message=Message(pic))
     except NetworkError:
         pass
     except Exception as err:
