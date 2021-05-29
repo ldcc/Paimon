@@ -51,11 +51,9 @@ async def setu_pic3(keyword='', r18=False, apikey='', is_proxy=False) -> str:
         url = data['url']
         pid = data['pid']
         try:
-            pic = f'[CQ:image,file=base64://{await down_pic(url, pid)}]'
+            return f'[CQ:image,file=base64://{await down_pic(url, pid)}]'
         except:
-            return f'获取图片失败，请稍后重试\n{url}'
-        msg = f'给大佬递图\nPid: {str(pid)}\nTitle: {title}\n画师: {author}\nUrl: {url}\n{pic}'
-        return msg
+            return f'获取图片失败，请稍后重试\nPid: {str(pid)}\nTitle: {title}\n画师: {author}\nUrl: {url}'
 
 
 async def down_pic(url, pid) -> str:
