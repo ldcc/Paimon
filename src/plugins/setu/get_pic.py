@@ -7,11 +7,11 @@ from httpx import AsyncClient
 import src.plugins as cfg
 
 
-async def setu_pic(keyword='', r18=False, is_proxy=True) -> str:
+async def setu_pic(keyword='', r18=False, is_proxy=False) -> str:
     pic = ''
     while len(cfg.apikeys) > 0:
         apikey = cfg.apikeys.pop(0)
-        pic = await setu_pic3(keyword, r18, apikey,is_proxy)
+        pic = await setu_pic3(keyword, r18, apikey, is_proxy)
         if pic != 'api调用已到达上限':
             cfg.apikeys.append(apikey)
             return pic
@@ -19,7 +19,7 @@ async def setu_pic(keyword='', r18=False, is_proxy=True) -> str:
     return pic
 
 
-async def setu_pic3(keyword='', r18=False, apikey='', is_proxy=True) -> str:
+async def setu_pic3(keyword='', r18=False, apikey='', is_proxy=False) -> str:
     r18 = 1 if r18 else 0
     proxy = 'i.pximg.net'
     if is_proxy:

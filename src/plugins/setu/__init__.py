@@ -6,7 +6,6 @@ from nonebot.adapters.cqhttp.event import GroupMessageEvent
 from .get_pic import setu_pic
 import src.plugins as cfg
 
-# permission=SUPERUSER
 setu = on_command('setu', aliases={'无内鬼', '涩图', '色图', '瑟图'})
 
 

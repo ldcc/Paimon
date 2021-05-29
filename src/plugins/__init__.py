@@ -4,7 +4,7 @@ from nonebot import get_driver
 from nonebot.adapters.cqhttp.bot import Bot
 
 driver = get_driver()
-default_switch_map = {'色图': True, '防撤回': True, '戳一戳': True, '偷闪照': True, 'r18': False, 'proxy': True}
+default_switch_map = {'色图': False, '防撤回': True, '戳一戳': True, '偷闪照': True, 'r18': False, 'proxy': False}
 group_switcher = dict()
 bot_info = dict()
 ls = []

@@ -5,14 +5,14 @@ from nonebot.adapters.cqhttp.bot import Bot
 from nonebot.adapters.cqhttp.message import Message
 from nonebot.adapters.cqhttp.event import GroupMessageEvent, \
     FriendRecallNoticeEvent, PokeNotifyEvent, GroupRecallNoticeEvent
+from nonebot.permission import SUPERUSER
 from nonebot.rule import to_me
 from nonebot.typing import T_State
 
 import src.plugins as cfg
 
-# permission=SUPERUSER
 features = '- 色图\n- 防撤回\n- 戳一戳\n- 偷闪照\n'
-switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'})
+switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'}, permission=SUPERUSER)
 switch_off = on_command('功能关闭', aliases={'关闭功能'})
 poke = on_notice(rule=to_me())
 recall = on_notice(priority=10)
@@ -43,7 +43,6 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     ret = await cfg.set_switch(event.group_id, state['switch_off'], False)
     await switch_on.finish(message=Message(ret))
-
 
 
 # 群聊撤回
