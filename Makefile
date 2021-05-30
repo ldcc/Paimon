@@ -12,7 +12,7 @@ start:
 	make paimon
 upgrade:
 	git stash
-	git pull
+	git pull origin master
 	git stash drop
 	python3.8 -m pip install -r requirements.txt
 	make start
