@@ -12,7 +12,7 @@ auths = 'allow - 允许管理员权限\ndrop - 撤销管理员权限\n'
 set_auth = on_command('管理员设置', rule=to_me(), permission=SUPERUSER)
 
 features = '- 色图\n- 防撤回\n- 戳一戳\n- 偷闪照\n'
-switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'}, rule=to_me())
+switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'})
 switch_off = on_command('功能关闭', aliases={'关闭功能'})
 
 
@@ -38,7 +38,7 @@ async def _(bot: Bot, state: T_State):
 
 @switch_on.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    if event.user_id in cfg.managers:
+    if str(event.user_id) in cfg.managers:
         key = str(event.get_message()).strip()
         if key:
             state['switch_on'] = key
@@ -49,7 +49,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 @switch_on.got('switch_on', prompt=f'请输入要开启的功能：\n{features}')
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     key = state['switch_on']
-    if key == 'r18' and event.user_id not in cfg.supersuers:
+    if key == 'r18' and str(event.user_id) not in cfg.supersuers:
         await switch_on.finish(f'摇了我吧，{cfg.bot_info["nickname"]}不想蹲局子')
     ret = await cfg.set_switch(event.group_id, state['switch_on'], True)
     await switch_on.finish(message=Message(ret))
