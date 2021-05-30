@@ -1,3 +1,5 @@
+import base64
+import json
 import os
 
 from nonebot import get_driver
@@ -7,8 +9,10 @@ driver = get_driver()
 default_switch_map = {'色图': False, '防撤回': True, '戳一戳': True, '偷闪照': True, 'r18': False, 'proxy': False}
 group_switcher = dict()
 bot_info = dict()
-ls = []
+managers = dict()
+supersuers = set()
 apikeys = []
+ls = []
 
 
 async def append_ls(v):
@@ -25,11 +29,13 @@ async def reset_apikeys_default():
 
 @driver.on_bot_connect
 async def _(bot: Bot):
-    global bot_info, ls, apikeys
+    global bot_info, supersuers, managers, apikeys, ls
     bot_info = await bot.get_login_info()
-    ls = os.listdir(r'./src/data/store')
+    managers = await load_manager()
+    supersuers = driver.config.superusers
     apikeys = driver.config.apikeys
     default_switch_map['proxy'] = driver.config.setu_proxy
+    ls = os.listdir(r'./src/data/store')
 
 
 def format_group_message(msgs):
@@ -45,6 +51,23 @@ def format_group_message(msgs):
         }
         nodes.append(data)
     return nodes
+
+
+async def load_manager() -> dict:
+    with open(r'./src/data/managers.json', 'r') as f:
+        return json.load(f)
+
+
+async def set_manager(uin, status) -> bool:
+    global managers
+    managers[uin] = status
+    try:
+        with open(r'./src/data/managers.json', 'w') as f:
+            json.dump(managers, f)
+            return True
+    except Exception as err:
+        print(err)
+        return False
 
 
 async def set_switch(group_id, key, status) -> str:
