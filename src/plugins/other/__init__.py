@@ -14,7 +14,6 @@ recall = on_notice(priority=10)
 flashimg = on_message(priority=10)
 
 
-
 # 群聊撤回
 @recall.handle()
 async def _(bot: Bot, event: GroupRecallNoticeEvent):
@@ -24,7 +23,7 @@ async def _(bot: Bot, event: GroupRecallNoticeEvent):
     mid = event.message_id
     meg = await bot.get_msg(message_id=mid)
     if event.user_id != event.self_id and ',type=flash' not in meg['raw_message']:
-        re = '刚刚说了:\n' + meg['raw_message'] + '\n不要以为派蒙没看见！'
+        re = '刚刚说了:\n' + meg['raw_message'] + '\n不要以为我没看见！'
         await recall.finish(message=Message(re), at_sender=True)
 
 
@@ -34,7 +33,7 @@ async def _(bot: Bot, event: FriendRecallNoticeEvent):
     mid = event.message_id
     meg = await bot.get_msg(message_id=mid)
     if event.user_id != event.self_id and 'type=flash,' not in meg['message']:
-        re = '刚刚说了:' + meg['message'] + '\n不要以为派蒙没看见！'
+        re = '刚刚说了:' + meg['message'] + '\n不要以为我没看见！'
         await recall.finish(message=Message(re))
 
 

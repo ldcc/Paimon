@@ -23,4 +23,4 @@ async def _(bot: Bot, event: GroupMessageEvent):
         pass
     except Exception as err:
         print(err)
-        await setu.send(message=Message('消息被风控，派蒙不背锅'))
+        await setu.send(message=Message('消息被风控，我可不背锅'))

@@ -8,10 +8,10 @@ from nonebot.typing import T_State
 
 import src.plugins as cfg
 
-auths = 'allow - 允许管理员权限\ndrop - 撤销管理员权限\n'
+auths = 'allow - 允许管理员权限\ndrop - 撤销管理员权限'
 set_auth = on_command('管理员设置', rule=to_me(), permission=SUPERUSER)
 
-features = '- 色图\n- 防撤回\n- 戳一戳\n- 偷闪照\n'
+features = '- 色图\n- 防撤回\n- 戳一戳\n- 偷闪照'
 switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'})
 switch_off = on_command('功能关闭', aliases={'关闭功能'})
 
@@ -20,7 +20,7 @@ switch_off = on_command('功能关闭', aliases={'关闭功能'})
 async def _(bot: Bot, event: MessageEvent, state: T_State):
     msg = str(event.get_message()).strip()
     if msg == '':
-        await set_auth.finish(message=f'格式错误，参考输出\n{auths}')
+        await bot.finish(message=f'格式错误，参考输出\n{auths}')
     pair = msg.split(' ', 1)
     state['instruct'] = pair[0].strip()
     if len(pair) < 2:
