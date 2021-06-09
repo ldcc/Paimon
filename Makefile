@@ -29,6 +29,6 @@ abort: abort-cqhttp abort-$(app)
 abort-$(app):
 	if [ -n "`docker ps -a | grep $(app)`" ]; then docker rm `docker stop $(app)`; fi
 abort-cqhttp:
-	if [ -n "`pgrep $(cqhttp)`" ]; then sudo pkill $(cqhttp); fi
+	if [ -n "`pgrep $(cqhttp)`" ]; then kill `pgrep $(cqhttp)`; fi
 
 .PHONY: cqhttp upgrade start abort abort-$(app) abort-cqhttp
