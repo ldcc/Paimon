@@ -15,6 +15,7 @@ commit:
 	if [ -z "`git status | grep 'nothing to commit'`" ]; then \
   		git commit -m 'save stored'; \
 	fi
+	git add .
 	git stash
 	if [ -n "`git stash list`" ]; then git stash drop; fi
 	git pull origin master
