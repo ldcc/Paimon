@@ -18,7 +18,7 @@ commit:
 	git add .
 	if [ -z "`git stash | grep 'No local changes to save'`" ]; then git stash drop; fi
 	git pull origin master
-	if [ -n "`git status | grep 'is up to date'`" ]; then git push origin master; fi
+	if [ -z "`git status | grep 'is up to date'`" ]; then git push origin master; fi
 upgrade:
 	make commit
 	if [ -z "`docker images | grep python | grep 3.8`" ]; then docker pull python:3.8; fi
