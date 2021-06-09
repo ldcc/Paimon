@@ -20,12 +20,13 @@ commit:
 upgrade:
 	make commit
 	git pull origin master
+	if [ -z "`docker images | grep python | grep 3.8`" ]; then docker pull python:3.8; fi
 	docker build -t $(app):latest .
 	make $(app)
 
 abort: abort-cqhttp abort-$(app)
 abort-$(app):
-	if [ -n "`docker ps -a | grep $(app)`" ]; then docker container rm `docker stop $(app)` > /dev/null; fi
+	if [ -n "`docker ps -a | grep $(app)`" ]; then docker rm `docker stop $(app)`; fi
 abort-cqhttp:
 	if [ -n "`pgrep $(cqhttp)`" ]; then sudo pkill $(cqhttp); fi
 
