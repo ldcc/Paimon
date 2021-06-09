@@ -16,7 +16,7 @@ commit:
   		git commit -m 'save stored'; \
 	fi
 	git add .
-	if [ -z "`git stash | grep No local changes to save`" ]; then git stash drop; fi
+	if [ -z "`git stash | grep 'No local changes to save'`" ]; then git stash drop; fi
 	git pull origin master
 	if [ -n "`git status | grep 'is up to date'`" ]; then git push origin master; fi
 upgrade:
