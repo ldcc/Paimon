@@ -12,9 +12,11 @@ start:
 	make $(app)
 commit:
 	git add src/data/store
-	git commit -m 'save stored'
-	git stash
-	if [ -n "`git stash list`" ]; then git stash drop; fi
+	if [ -z git status | grep 'nothing to commit' ]; then \
+  		git commit -m 'save stored' &&\
+		git stash &&\
+		if [ -n "`git stash list`" ]; then git stash drop; fi \
+	fi
 	git pull origin master
 	git push origin master
 upgrade:
