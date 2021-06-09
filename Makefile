@@ -12,7 +12,7 @@ start:
 	make $(app)
 commit:
 	git add src/data/store
-	if [ -z "`git status | grep 'nothing to commit'`" ]; then \
+	if [ -n "`git status | grep 'Changes to be committed'`" ]; then \
   		git commit -m 'save stored'; \
 	fi
 	git add .
