@@ -14,7 +14,7 @@ commit:
 	git add src/data/store
 	git commit -m 'save stored'
 	git stash
-	git stash drop
+	if [ -n "`git stash list`" ]; then git stash drop; fi
 	git pull origin master
 	git push origin master
 upgrade:
