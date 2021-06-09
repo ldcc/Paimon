@@ -12,16 +12,15 @@ start:
 	make $(app)
 commit:
 	git add src/data/store
-	if [ -z git status | grep 'nothing to commit' ]; then \
-  		git commit -m 'save stored' &&\
-		git stash &&\
-		if [ -n "`git stash list`" ]; then git stash drop; fi \
+	if [ -z "`git status | grep 'nothing to commit'`" ]; then \
+  		git commit -m 'save stored'; \
 	fi
+	git stash
+	if [ -n "`git stash list`" ]; then git stash drop; fi
 	git pull origin master
-	git push origin master
+	if [ -n "`git status | grep 'is up to date'`" ]; git push origin master; fi
 upgrade:
 	make commit
-	git pull origin master
 	if [ -z "`docker images | grep python | grep 3.8`" ]; then docker pull python:3.8; fi
 	docker build -t $(app):latest .
 	make $(app)
