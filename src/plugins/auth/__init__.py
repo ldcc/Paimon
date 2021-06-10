@@ -23,9 +23,8 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
         await bot.finish(message=f'格式错误，参考输出\n{auths}')
     pair = msg.split(' ', 1)
     state['instruct'] = pair[0].strip()
-    if len(pair) < 2:
-        return
-    state['uin'] = pair[1].strip()
+    if len(pair) == 2:
+        state['uin'] = pair[1].strip()
 
 
 @set_auth.got('uin', prompt='请输入 uin')
