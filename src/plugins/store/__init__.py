@@ -33,13 +33,13 @@ async def _(bot: Bot, event: Event, state: T_State):
         await save.finish(message=Message('错误的格式'))
     state['instruct'] = pair[0].strip()
     if len(pair) == 2:
-        state['content'] = pair[1].strip()
+        state['content'] = pair[1]
 
 
 @save.got('content', prompt='请发送要记录的数据')
 async def _(bot: Bot, event: Event, state: T_State):
     instruct = state['instruct']
-    content = state['content']
+    content = state['content'].strip()
     if len(instruct) < 2:
         await save.finish(message='关键词不能太短')
     if any(map(lambda c: c in spec_sym, instruct)):
