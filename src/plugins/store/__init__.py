@@ -39,7 +39,7 @@ async def _(bot: Bot, event: Event, state: T_State):
 @save.got('content', prompt='请发送要记录的数据')
 async def _(bot: Bot, event: Event, state: T_State):
     instruct = state['instruct']
-    content = state['content'].strip()
+    content = str(state['content']).strip()
     if len(instruct) < 2:
         await save.finish(message='关键词不能太短')
     if any(map(lambda c: c in spec_sym, instruct)):
@@ -61,19 +61,27 @@ async def _(bot: Bot, event: Event, state: T_State):
 
 @drop.handle()
 async def _(bot: Bot, event: Event, state: T_State):
-    instruct = str(event.get_message()).strip()
-    if instruct:
-        state['instruct'] = instruct
+    instructs = event.get_message()
+    if instructs:
+        state['instructs'] = instructs
 
 
 @drop.got('instruct', prompt='请发送要删除的圣经')
 async def _(bot: Bot, event: Event, state: T_State):
-    instruct = state['instruct']
-    file = os.path.join(r'./src/data/store', instruct)
-    if os.path.exists(file):
+    instructs = str(state['instructs']).strip().split(' ')
+    if len(instructs) == 0:
+        await drop.finish(message=Message('参数错误'))
+
+    async def rm(instruct):
+        file = os.path.join(r'./src/data/store', instruct)
+        if not os.path.exists(file):
+            await drop.send(message=Message(f'没有{instruct}这条圣经'))
+            return False
         os.remove(file)
-        await save.finish(message=Message('👌'))
-    await save.finish(message=Message('没有这条圣经'))
+        return True
+
+    if all(map(rm, instructs)):
+        await drop.finish(message=Message('👌'))
 
 
 @load.handle()
@@ -88,7 +96,7 @@ async def _(bot: Bot, event: Event):
                 Timer(cd, allow_chat).start()
                 with open(file, 'r', encoding='utf-8') as f:
                     data = base64.b64decode(f.read()).decode()
-                await save.finish(message=Message(data))
+                await load.finish(message=Message(data))
 
 
 def allow_chat():

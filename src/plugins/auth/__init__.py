@@ -24,21 +24,21 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
     pair = msg.split(' ', 1)
     state['instruct'] = pair[0].strip()
     if len(pair) == 2:
-        state['uin'] = pair[1].strip()
+        state['uin'] = pair[1]
 
 
 @set_auth.got('uin', prompt='请输入 uin')
 async def _(bot: Bot, state: T_State):
-    action = state['instruct']
-    uin = state['uin']
-    ret = await cfg.set_manager(uin, action == 'allow')
+    instruct = state['instruct']
+    uin = str(state['uin']).strip()
+    ret = await cfg.set_manager(uin, instruct == 'allow')
     await set_auth.finish(message=('设置' + '成功' if ret else '失败'))
 
 
 @switch_on.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     if str(event.user_id) in cfg.managers:
-        key = str(event.get_message()).strip()
+        key = event.get_message()
         if key:
             state['switch_on'] = key
     else:
@@ -47,21 +47,22 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 
 @switch_on.got('switch_on', prompt=f'请输入要开启的功能：\n{features}')
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    key = state['switch_on']
-    if key == 'r18' and str(event.user_id) not in cfg.supersuers:
+    key = str(state['switch_on']).strip()
+    if key in '色图r18' and str(event.user_id) not in cfg.supersuers:
         await switch_on.finish(f'摇了我吧，{cfg.bot_info["nickname"]}不想蹲局子')
-    ret = await cfg.set_switch(event.group_id, state['switch_on'], True)
+    ret = await cfg.set_switcher(event.group_id, key, True)
     await switch_on.finish(message=Message(ret))
 
 
 @switch_off.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    key = str(event.get_message()).strip()
+    key = event.get_message()
     if key:
         state['switch_off'] = key
 
 
 @switch_off.got('switch_off', prompt=f'请输入要关闭的功能：\n{features}')
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    ret = await cfg.set_switch(event.group_id, state['switch_off'], False)
+    key = str(state['switch_off']).strip()
+    ret = await cfg.set_switcher(event.group_id, key, False)
     await switch_on.finish(message=Message(ret))

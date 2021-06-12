@@ -12,7 +12,7 @@ setu = on_command('setu', aliases={'无内鬼', '涩图', '色图', '瑟图'})
 # 涩图
 @setu.handle()
 async def _(bot: Bot, event: GroupMessageEvent):
-    switch_map = cfg.check_switch(event.group_id, '色图')
+    switch_map = cfg.check_switcher(event.group_id, '色图')
     if len(switch_map) == 0:
         return
     key = str(event.get_message()).strip()
