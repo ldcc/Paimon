@@ -3,8 +3,7 @@ import os
 from threading import Timer
 
 from nonebot import on_command, on_message
-from nonebot.adapters.cqhttp.bot import Bot
-from nonebot.adapters.cqhttp import GroupMessageEvent, Message, Event
+from nonebot.adapters.cqhttp import GroupMessageEvent, Bot, Message, Event
 from nonebot.rule import to_me
 from nonebot.typing import T_State
 import src.plugins as cfg

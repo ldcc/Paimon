@@ -1,5 +1,6 @@
 app=lemon
 cqhttp=go-cqhttp
+py_ver=3.9
 
 $(app): abort-$(app)
 	docker run -dp 0.0.0.0:6000:6000 -v $(PWD)/src/data/store:/app/src/data/store --name $(app) $(app):latest
@@ -21,7 +22,7 @@ commit:
 	if [ -z "`git status | grep 'is up to date'`" ]; then git push origin master; fi
 upgrade:
 	make commit
-	if [ -z "`docker images | grep python | grep 3.8`" ]; then docker pull python:3.8; fi
+	if [ -z "`docker images | grep python | grep $(py_ver)`" ]; then docker pull python:$(py_ver); fi
 	docker build -t $(app):latest .
 	make $(app)
 

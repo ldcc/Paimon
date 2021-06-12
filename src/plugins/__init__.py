@@ -1,4 +1,3 @@
-import base64
 import json
 import os
 
@@ -6,13 +5,15 @@ from nonebot import get_driver
 from nonebot.adapters.cqhttp.bot import Bot
 
 driver = get_driver()
-default_switcher_map = {'色图': False, '防撤回': True, '戳一戳': True, '偷闪照': True, 'r18': False, 'proxy': False}
+default_switcher_map = {'色图': False, '防撤回': False, '戳一戳': True, '偷闪照': True, 'r18': False, 'proxy': False}
 group_switcher = dict()
 bot_info = dict()
 managers = dict()
 supersuers = set()
 apikeys = []
 ls = []
+
+IMAGE_PATH = r'./src/data/images'
 
 
 async def append_ls(v):
@@ -91,11 +92,8 @@ async def set_switcher(group_id, key, status) -> str:
         return f'没有{key}这种功能'
     switcher_map[key] = status
     group_switcher[group_id] = switcher_map
-    try:
-        with open(r'./src/data/auth/switchers.json', 'w') as f:
-            json.dump(group_switcher, f)
-    except Exception as err:
-        print(err)
+    with open(r'./src/data/auth/switchers.json', 'w') as f:
+        json.dump(group_switcher, f)
     return f'{key}{status_ret}成功'
 
 

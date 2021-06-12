@@ -23,7 +23,7 @@ async def _(bot: Bot, event: GroupRecallNoticeEvent):
     mid = event.message_id
     msg = await bot.get_msg(message_id=mid)
     if event.user_id != event.self_id and ',type=flash' not in msg['raw_message']:
-        re = '刚刚说了:\n' + msg['raw_message'] + '\n不要以为我没看见！'
+        re = '刚刚说了:\n' + msg['raw_message']
         await recall.finish(message=Message(re), at_sender=True)
 
 
@@ -33,7 +33,7 @@ async def _(bot: Bot, event: FriendRecallNoticeEvent):
     mid = event.message_id
     msg = await bot.get_msg(message_id=mid)
     if event.user_id != event.self_id and 'type=flash,' not in msg['raw_message']:
-        re = '刚刚说了:' + msg['raw_message'] + '\n不要以为我没看见！'
+        re = '刚刚说了:' + msg['raw_message']
         await recall.finish(message=Message(re))
 
 
@@ -44,9 +44,9 @@ async def _(bot: Bot, event: PokeNotifyEvent) -> None:
     if len(switch_map) == 0:
         return
     msg = choice([
-        "你再戳！", "？再戳试试？", "别戳了别戳了再戳就坏了555", "我爪巴爪巴，球球别再戳了", "你戳你🐎呢？！",
-        "那...那里...那里不能戳...绝对...", "(。´・ω・)ん?", "有事恁叫我，别天天一个劲戳戳戳！", "欸很烦欸！",
-        "?", "差不多得了😅", "这好吗？这不好！", "我希望你耗子尾汁"
+        '你再戳！', '？再戳试试？', '别戳了别戳了再戳就坏了555', '我爪巴爪巴，球球别再戳了', '你戳你🐎呢？！',
+        '那...那里...那里不能戳...绝对...', '(。´・ω・)ん?', '有事恁叫我，别天天一个劲戳戳戳！', '欸很烦欸！',
+        '?', '差不多得了😅', '这好吗？这不好！', '我希望你耗子尾汁'
     ])
     await poke.finish(msg, at_sender=True)
 
@@ -60,4 +60,4 @@ async def _(bot: Bot, event: GroupMessageEvent):
     msg = str(event.get_message())
     if ',type=flash' in msg:
         msg = msg.replace(',type=flash', '')
-        await flashimg.finish(message=Message("不要发闪照，好东西就要分享。" + msg), at_sender=True)
+        await flashimg.finish(message=Message('不要发闪照，好东西就要大家一起分享。' + msg), at_sender=True)

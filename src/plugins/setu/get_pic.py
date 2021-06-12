@@ -1,13 +1,15 @@
 import base64
 import io
+import os
 import random
 
 from PIL import Image, ImageDraw
 from httpx import AsyncClient
+from nonebot.adapters.cqhttp.message import MessageSegment
 import src.plugins as cfg
 
 
-async def setu_pic(keyword='', r18=False, is_proxy=False) -> str:
+async def setu_pic(keyword='', r18=False, is_proxy=False) -> MessageSegment:
     pic = ''
     while len(cfg.apikeys) > 0:
         apikey = cfg.apikeys.pop(0)
@@ -19,41 +21,41 @@ async def setu_pic(keyword='', r18=False, is_proxy=False) -> str:
     return pic
 
 
-async def setu_pic3(keyword='', r18=False, apikey='', is_proxy=False) -> str:
+async def setu_pic3(keyword='', r18=False, apikey='', is_proxy=False) -> MessageSegment:
     r18 = 1 if r18 else 0
     proxy = 'i.pximg.net'
     if is_proxy:
         proxy = 'i.pixiv.cat'
     async with AsyncClient() as client:
-        req_url = "https://api.lolicon.app/setu/"
+        req_url = 'https://api.lolicon.app/setu/'
         params = {
-            "apikey": apikey,
-            "r18": r18,
-            "size1200": 'true',
+            'apikey': apikey,
+            'r18': r18,
+            'size1200': 'true',
             'keyword': keyword,
             'proxy': proxy
         }
         try:
             res = await client.get(req_url, params=params)
         except:
-            return '网络错误，请稍后重试'
+            return MessageSegment.text('网络错误，请稍后重试')
         try:
             data = res.json()['data'][0]
         except:
             print(res.text)
             if '额度限制' in res.text:
-                return 'api调用已到达上限'
+                return MessageSegment.text('api调用已到达上限')
             else:
-                return f"图库中没有搜到关于{keyword}的图。"
+                return MessageSegment.text(f'图库中没有搜到关于{keyword}的图。')
 
         author = data['author']
         title = data['title']
         url = data['url']
         pid = data['pid']
         try:
-            return f'[CQ:image,file=base64://{await down_pic(url, pid)}]'
-        except:
-            return f'获取图片失败，请稍后重试\nPid: {str(pid)}\nTitle: {title}\n画师: {author}\nUrl: {url}'
+            return MessageSegment.image(f'base64://{await down_pic(url, pid)}')
+        except Exception as err:
+            return MessageSegment.text(f'获取图片失败\n画师: {author}\nTitle: {title}\nUrl: {url}\nErr: {err}')
 
 
 async def down_pic(url, pid) -> str:
@@ -68,7 +70,7 @@ async def down_pic(url, pid) -> str:
         return base64.b64encode(pic).decode()
 
 
-def anti_harmonious(pic):
+def anti_harmonious(pic: bytes) -> bytes:
     im = Image.open(io.BytesIO(pic))
     if im.mode != 'RGB':
         im = im.convert('RGB')

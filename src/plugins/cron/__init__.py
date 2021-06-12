@@ -9,7 +9,6 @@ driver = get_driver()
 
 running = False
 count = 0
-FILE_PATH = r'./src/data/cron'
 
 
 @driver.on_bot_connect
@@ -24,7 +23,7 @@ async def _(bot: Bot):
 # @scheduler.scheduled_job('cron', hour='15', minute='*/21', second='0', max_instances=10)
 # async def _():
 #     global groups
-#     with open(os.path.join(FILE_PATH, '3.j.jpg'), "rb") as j3:
+#     with open(os.path.join(Image_PATH, '3.j.jpg'), 'rb') as j3:
 #         pic = base64.b64encode(j3.read()).decode()
 #         message = Message(f'[CQ:image,file=base64://{pic}]')
 #         try:

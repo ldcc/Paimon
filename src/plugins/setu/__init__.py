@@ -1,12 +1,14 @@
+import base64
+import os.path
+
 from nonebot import on_command
-from nonebot.adapters.cqhttp.exception import NetworkError
-from nonebot.adapters.cqhttp.bot import Bot
-from nonebot.adapters.cqhttp.message import Message
-from nonebot.adapters.cqhttp.event import GroupMessageEvent
-from .get_pic import setu_pic
+from nonebot.adapters.cqhttp import Bot, MessageSegment, GroupMessageEvent, ActionFailed
+
+from .get_pic import setu_pic, anti_harmonious
 import src.plugins as cfg
 
 setu = on_command('setu', aliases={'无内鬼', '涩图', '色图', '瑟图'})
+RETRY = 3
 
 
 # 涩图
@@ -16,11 +18,24 @@ async def _(bot: Bot, event: GroupMessageEvent):
     if len(switch_map) == 0:
         return
     key = str(event.get_message()).strip()
-    pic = await setu_pic(key, switch_map['r18'], switch_map['proxy'])
+    mseg = await setu_pic(key, switch_map['r18'], switch_map['proxy'])
     try:
-        await setu.send(message=Message(pic))
-    except NetworkError:
-        pass
-    except Exception as err:
-        print(err)
-        await setu.send(message=Message('消息被风控，我可不背锅'))
+        await setu.send(message=mseg)
+    except ActionFailed:
+        pic = mseg.data.get('file')
+        if pic:
+            retry = 0
+            b64pic = base64.b64decode(pic.removeprefix('base64://'))
+            while retry < RETRY:
+                b64pic = anti_harmonious(b64pic)
+                pic = f'base64://{base64.b64encode(b64pic).decode()}'
+                try:
+                    await setu.send(message=MessageSegment.image(pic))
+                    return
+                except ActionFailed:
+                    retry += 1
+            with open(os.path.join(cfg.IMAGE_PATH, 'setu.png'), 'rb') as pic:
+                pic = f'base64://{base64.b64encode(pic.read()).decode()}'
+                await setu.send(message=MessageSegment.image(pic))
+    finally:
+        await setu.finish()
