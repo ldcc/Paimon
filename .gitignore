@@ -141,9 +141,5 @@ dmypy.json
 # End of https://www.toptal.com/developers/gitignore/api/python
 
 .idea/
-cqhttp/data/
+cqhttp/data
 cqhttp/config.hjson
-src/plugins/res_points/icon/*.png
-!src/plugins/res_points/icon/0.png
-!src/plugins/res_points/icon/box.png
-!src/plugins/res_points/icon/box_alpha.png
