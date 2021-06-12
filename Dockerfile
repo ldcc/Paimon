@@ -10,4 +10,4 @@ RUN rm -f /app/src/data/store/*
 RUN python3.8 -m pip install --upgrade pip
 RUN python3.8 -m pip install -r requirements.txt
 
-CMD ["nb", "run"]
+ENTRYPOINT ["nb", "run"]

@@ -17,13 +17,13 @@ flashimg = on_message(priority=10)
 # 群聊撤回
 @recall.handle()
 async def _(bot: Bot, event: GroupRecallNoticeEvent):
-    switch_map = cfg.check_switch(event.group_id, '防撤回')
+    switch_map = cfg.check_switcher(event.group_id, '防撤回')
     if len(switch_map) == 0:
         return
     mid = event.message_id
-    meg = await bot.get_msg(message_id=mid)
-    if event.user_id != event.self_id and ',type=flash' not in meg['raw_message']:
-        re = '刚刚说了:\n' + meg['raw_message'] + '\n不要以为我没看见！'
+    msg = await bot.get_msg(message_id=mid)
+    if event.user_id != event.self_id and ',type=flash' not in msg['raw_message']:
+        re = '刚刚说了:\n' + msg['raw_message'] + '\n不要以为我没看见！'
         await recall.finish(message=Message(re), at_sender=True)
 
 
@@ -31,16 +31,16 @@ async def _(bot: Bot, event: GroupRecallNoticeEvent):
 @recall.handle()
 async def _(bot: Bot, event: FriendRecallNoticeEvent):
     mid = event.message_id
-    meg = await bot.get_msg(message_id=mid)
-    if event.user_id != event.self_id and 'type=flash,' not in meg['message']:
-        re = '刚刚说了:' + meg['message'] + '\n不要以为我没看见！'
+    msg = await bot.get_msg(message_id=mid)
+    if event.user_id != event.self_id and 'type=flash,' not in msg['raw_message']:
+        re = '刚刚说了:' + msg['raw_message'] + '\n不要以为我没看见！'
         await recall.finish(message=Message(re))
 
 
 # 戳一戳
 @poke.handle()
 async def _(bot: Bot, event: PokeNotifyEvent) -> None:
-    switch_map = cfg.check_switch(event.group_id, '戳一戳')
+    switch_map = cfg.check_switcher(event.group_id, '戳一戳')
     if len(switch_map) == 0:
         return
     msg = choice([
@@ -54,7 +54,7 @@ async def _(bot: Bot, event: PokeNotifyEvent) -> None:
 # 闪照
 @flashimg.handle()
 async def _(bot: Bot, event: GroupMessageEvent):
-    switch_map = cfg.check_switch(event.group_id, '偷闪照')
+    switch_map = cfg.check_switcher(event.group_id, '偷闪照')
     if len(switch_map) == 0:
         return
     msg = str(event.get_message())
