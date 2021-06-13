@@ -9,7 +9,7 @@ import src.plugins as cfg
 
 keys = on_command('圣经')
 save = on_command('记录')
-drop = on_command('删除圣经', aliases={'圣经删除'})
+drop = on_command('删除记录', aliases={'删除圣经'})
 load = on_message(priority=10)
 spec_sym = ';:{}[],./<>?~!@#$%^&*()_+|`-=\\，。、《》？；：‘’“”【】'
 chat = True
@@ -53,7 +53,7 @@ async def _(bot: Bot, event: Event, state: T_State):
             f.write(data)
     except:
         return
-    await cfg.append_ls(instruct)
+    await cfg.stash_ls(instruct)
     await save.finish(message=Message('👌'))
 
 
@@ -76,6 +76,7 @@ async def _(bot: Bot, event: Event, state: T_State):
             await drop.send(message=Message(f'没有{instruct}这条圣经'))
             return False
         os.remove(file)
+        await cfg.drop_ls(instruct)
         return True
 
     if all([await rm(ins) for ins in instructs]):
