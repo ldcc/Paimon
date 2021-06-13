@@ -1,6 +1,6 @@
 app=lemon
 cqhttp=go-cqhttp
-py_ver=3.9
+export py_ver=3.9
 
 $(app): abort-$(app)
 	docker run -dp 0.0.0.0:6000:6000 -v $(PWD)/src/data/store:/app/src/data/store --name $(app) $(app):latest
@@ -24,7 +24,7 @@ upgrade:
 	make commit
 	if [ -z "`docker images | grep python | grep $(py_ver)`" ]; then docker pull python:$(py_ver); fi
 	docker build -t $(app):latest .
-	make $(app)
+	make start
 
 abort: abort-cqhttp abort-$(app)
 abort-$(app):

@@ -4,13 +4,12 @@ from threading import Timer
 
 from nonebot import on_command, on_message
 from nonebot.adapters.cqhttp import GroupMessageEvent, Bot, Message, Event
-from nonebot.rule import to_me
 from nonebot.typing import T_State
 import src.plugins as cfg
 
 keys = on_command('圣经')
-save = on_command('记录', rule=to_me())
-drop = on_command('删除圣经', rule=to_me())
+save = on_command('记录')
+drop = on_command('删除圣经', aliases={'圣经删除'})
 load = on_message(priority=10)
 spec_sym = ';:{}[],./<>?~!@#$%^&*()_+|`-=\\，。、《》？；：‘’“”【】'
 chat = True
@@ -65,7 +64,7 @@ async def _(bot: Bot, event: Event, state: T_State):
         state['instructs'] = instructs
 
 
-@drop.got('instruct', prompt='请发送要删除的圣经')
+@drop.got('instructs', prompt='请发送要删除的圣经')
 async def _(bot: Bot, event: Event, state: T_State):
     instructs = str(state['instructs']).strip().split(' ')
     if len(instructs) == 0:
@@ -79,7 +78,7 @@ async def _(bot: Bot, event: Event, state: T_State):
         os.remove(file)
         return True
 
-    if all(map(rm, instructs)):
+    if all([await rm(ins) for ins in instructs]):
         await drop.finish(message=Message('👌'))
 
 
