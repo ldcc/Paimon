@@ -10,17 +10,24 @@ group_switcher = dict()
 bot_info = dict()
 managers = dict()
 supersuers = set()
+ls = set()
 apikeys = []
-ls = []
 
 IMAGE_PATH = r'./src/data/images'
 
 
-async def append_ls(v):
+async def stash_ls(v):
     if v == '':
         return
     global ls
-    ls.append(v)
+    ls.add(v)
+
+
+async def drop_ls(v):
+    if v == '':
+        return
+    global ls
+    ls.discard(v)
 
 
 async def reset_apikeys_default():
@@ -37,7 +44,7 @@ async def _(bot: Bot):
     supersuers = driver.config.superusers
     apikeys = driver.config.apikeys
     default_switcher_map['proxy'] = driver.config.setu_proxy
-    ls = os.listdir(r'./src/data/store')
+    ls = set(os.listdir(r'./src/data/store'))
 
 
 def format_group_message(msgs):
