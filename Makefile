@@ -3,7 +3,10 @@ cqhttp=go-cqhttp
 export py_ver=3.9
 
 $(app): abort-$(app)
-	docker run -dp 0.0.0.0:6000:6000 -v $(PWD)/src/data/store:/app/src/data/store --name $(app) $(app):latest
+	docker run -dp 0.0.0.0:6000:6000 \
+				-v $(PWD)/src/data/store:/app/src/data/store \
+				-v $(PWD)/src/data/auth:/app/src/data/auth \
+				--name $(app) $(app):latest
 cqhttp: abort-cqhttp
 	cd cqhttp && \
 	chmod +x $(cqhttp) && \
@@ -12,7 +15,7 @@ start:
 	make cqhttp
 	make $(app)
 commit:
-	git add src/data/store
+	git add src/data
 	if [ -n "`git status | grep 'Changes to be committed'`" ]; then \
   		git commit -m 'save stored'; \
 	fi

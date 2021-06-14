@@ -82,3 +82,17 @@ def anti_harmonious(pic: bytes) -> bytes:
     pic = io.BytesIO()
     im.save(pic, format='JPEG')
     return pic.getvalue()
+
+#
+# if __name__ == '__main__':
+#     setu_dir = os.path.join(cfg.IMAGE_PATH, 'setu')
+#     setus = os.listdir(setu_dir)
+#     for setu in setus:
+#         with open(os.path.join(setu_dir, setu), 'rb') as f:
+#             pic = anti_harmonious(f.read())
+#             pic = anti_harmonious(pic)
+#             pic = anti_harmonious(pic)
+#             pic = anti_harmonious(pic)
+#             pic = anti_harmonious(pic)
+#         with open(os.path.join(setu_dir, setu), 'wb') as f:
+#             f.write(pic)

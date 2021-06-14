@@ -14,6 +14,7 @@ ls = set()
 apikeys = []
 
 IMAGE_PATH = r'./src/data/images'
+STORE_PATH = r'./src/data/store'
 
 
 async def stash_ls(v):
@@ -44,21 +45,30 @@ async def _(bot: Bot):
     supersuers = driver.config.superusers
     apikeys = driver.config.apikeys
     default_switcher_map['proxy'] = driver.config.setu_proxy
-    ls = set(os.listdir(r'./src/data/store'))
+    ls = set(os.listdir(STORE_PATH))
 
 
-def format_group_message(msgs):
+def format_group_message(msg_pairs: dict, user_id):
     nodes = []
-    for msg in msgs:
-        data = {
+    for key, data in msg_pairs.items():
+        data1 = {
+            'type': 'node',
+            'data': {
+                'name': '纯路人',
+                'uin': user_id,
+                'content': key
+            }
+        }
+        data2 = {
             'type': 'node',
             'data': {
                 'name': bot_info['nickname'],
                 'uin': str(bot_info['user_id']),
-                'content': msg
+                'content': data
             }
         }
-        nodes.append(data)
+        nodes.append(data1)
+        nodes.append(data2)
     return nodes
 
 

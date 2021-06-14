@@ -18,7 +18,13 @@ cd = 1  # sec
 
 @keys.handle()
 async def _(bot: Bot, event: GroupMessageEvent):
-    mes_list = cfg.format_group_message(cfg.ls)
+    msg_pairs = dict()
+    for key in cfg.ls:
+        file = os.path.join(cfg.STORE_PATH, key)
+        with open(file, 'r', encoding='utf-8') as f:
+            data = base64.b64decode(f.read()).decode()
+            msg_pairs[key] = data
+    mes_list = cfg.format_group_message(msg_pairs, str(event.user_id))
     await bot.send_group_forward_msg(group_id=event.group_id, messages=Message(mes_list))
 
 
@@ -36,6 +42,7 @@ async def _(bot: Bot, event: Event, state: T_State):
 
 @save.got('content', prompt='请发送要记录的数据')
 async def _(bot: Bot, event: Event, state: T_State):
+    # TODO 使用 MessageSegment 检查图片来源为 url 时转码为 base64
     instruct = state['instruct']
     content = str(state['content']).strip()
     if len(instruct) < 2:
@@ -43,7 +50,7 @@ async def _(bot: Bot, event: Event, state: T_State):
     if any(map(lambda c: c in spec_sym, instruct)):
         await save.finish(message='含有非法关键字')
 
-    file = os.path.join(r'./src/data/store', instruct)
+    file = os.path.join(cfg.STORE_PATH, instruct)
     if os.path.exists(file):
         with open(file, 'r', encoding='utf-8') as f:
             content += base64.b64decode(f.read()).decode()
@@ -71,7 +78,7 @@ async def _(bot: Bot, event: Event, state: T_State):
         await drop.finish(message=Message('参数错误'))
 
     async def rm(instruct):
-        file = os.path.join(r'./src/data/store', instruct)
+        file = os.path.join(cfg.STORE_PATH, instruct)
         if not os.path.exists(file):
             await drop.send(message=Message(f'没有{instruct}这条圣经'))
             return False
@@ -89,7 +96,7 @@ async def _(bot: Bot, event: Event):
     if chat:
         msg = str(event.get_message()).strip()
         for instruct in cfg.ls:
-            file = os.path.join(r'./src/data/store', instruct)
+            file = os.path.join(cfg.STORE_PATH, instruct)
             if instruct in msg and os.path.exists(file):
                 chat = False
                 Timer(cd, allow_chat).start()
