@@ -18,13 +18,8 @@ cd = 1  # sec
 
 @keys.handle()
 async def _(bot: Bot, event: GroupMessageEvent):
-    msg_pairs = dict()
-    for key in cfg.ls:
-        file = os.path.join(cfg.STORE_PATH, key)
-        with open(file, 'r', encoding='utf-8') as f:
-            data = base64.b64decode(f.read()).decode()
-            msg_pairs[key] = data
-    mes_list = cfg.format_group_message(msg_pairs, str(event.user_id))
+    msg_pairs = dict.fromkeys(cfg.ls)
+    mes_list = cfg.format_group_message(msg_pairs)
     await bot.send_group_forward_msg(group_id=event.group_id, messages=Message(mes_list))
 
 
