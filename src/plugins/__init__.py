@@ -48,27 +48,32 @@ async def _(bot: Bot):
     ls = set(os.listdir(STORE_PATH))
 
 
-def format_group_message(msg_pairs: dict, user_id):
+def format_group_message(msg_pairs: dict, user_id=None):
     nodes = []
+    user_name = '纯路人'
+    if user_id is None:
+        user_id = bot_info['user_id']
+        user_name = bot_info['nickname']
     for key, data in msg_pairs.items():
         data1 = {
             'type': 'node',
             'data': {
-                'name': '纯路人',
-                'uin': user_id,
+                'uin': str(user_id),
+                'name': user_name,
                 'content': key
             }
         }
-        data2 = {
-            'type': 'node',
-            'data': {
-                'name': bot_info['nickname'],
-                'uin': str(bot_info['user_id']),
-                'content': data
-            }
-        }
         nodes.append(data1)
-        nodes.append(data2)
+        if data:
+            data2 = {
+                'type': 'node',
+                'data': {
+                    'uin': str(bot_info['user_id']),
+                    'name': bot_info['nickname'],
+                    'content': data
+                }
+            }
+            nodes.append(data2)
     return nodes
 
 
