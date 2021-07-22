@@ -48,8 +48,8 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 @switch_on.got('switch_on', prompt=f'请输入要开启的功能：\n{features}')
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     key = str(state['switch_on']).strip()
-    if key in '色图r18' and str(event.user_id) not in cfg.supersuers:
-        await switch_on.finish(f'摇了我吧，{cfg.bot_info["nickname"]}不想蹲局子')
+    if key in 'r18' and str(event.user_id) not in cfg.supersuers:
+        await switch_on.finish(f'摇了我吧，爷8想蹲局子')
     ret = await cfg.set_switcher(event.group_id, key, True)
     await switch_on.finish(message=Message(ret))
 
