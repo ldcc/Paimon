@@ -12,4 +12,5 @@ async def _(bot: Bot):
                       f'3.@{cfg.bot_info["nickname"]} 后发送 [记录 <关键字> <数据>] 可以记录圣经，当对话中含有关键字时自动触发圣经\n'
                       f'4.@{cfg.bot_info["nickname"]} 后发送 [删除记录 <关键字> ...] 批量删除已记录的圣经\n'
                       f'5.发送 [圣经] 查看所有圣经\n'
+                      f'6.发送 [哪有素材名] 查找原神素材\n'
                       f'项目开源地址：https://github.com/ldcc/Lemon')

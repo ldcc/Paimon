@@ -8,17 +8,18 @@ import base64
 
 LABEL_URL = 'https://api-static.mihoyo.com/common/blackboard/ys_obc/v1/map/label/tree?app_sn=ys_obc'
 POINT_LIST_URL = 'https://api-static.mihoyo.com/common/blackboard/ys_obc/v1/map/point/list?map_id=2&app_sn=ys_obc'
+MAP_URL = 'https://api-static.mihoyo.com/common/map_user/ys_obc/v1/map/info?map_id=2&app_sn=ys_obc&lang=zh-cn'
 
 header = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'
 
 FILE_PATH = os.path.dirname(__file__)
 
 MAP_PATH = os.path.join(FILE_PATH, 'icon', 'map_icon.jpg')
-MAP_IMAGE = Image.open(MAP_PATH)
-MAP_SIZE = MAP_IMAGE.size
 
-# resource_point里记录的坐标是相对坐标，是以蒙德城的大雕像为中心的，所以图片合成时需要转换坐标
-CENTER = (3505, 1907)
+# 这3个常量放在up_map()函数里更新
+MAP_IMAGE = None
+MAP_SIZE = None
+CENTER = None
 
 zoom = 0.75
 resource_icon_offset = (-int(150 * 0.5 * zoom), -int(150 * zoom))
@@ -29,7 +30,7 @@ data = {
         # '1': {
         #         'id': 1,
         #         'name': '传送点',
-        #         'icon': "",
+        #         'icon': '',
         #         'parent_id': 0,
         #         'depth': 1,
         #         'node_type': 1,
@@ -58,8 +59,57 @@ data = {
         #     'display_state': 1
         # },
     ],
-    'date': ""  # 记录上次更新'all_resource_point_list'的日期
+    'date': ''  # 记录上次更新'all_resource_point_list'的日期
 }
+
+
+def download_icon(url):
+    # 下载分块的地图图片文件
+    # 返回 Image
+    schedule = request.Request(url)
+    schedule.add_header('User-Agent', header)
+
+    with request.urlopen(schedule) as f:
+        icon = Image.open(f)
+        return icon
+
+
+def update_map_icon():
+    # 更新地图文件
+    print('正在更新地图文件')
+    schedule = request.Request(MAP_URL)
+    schedule.add_header('User-Agent', header)
+
+    with request.urlopen(schedule) as f:
+        rew_data = f.read().decode('utf-8')
+        data = json.loads(rew_data)['data']['info']['detail']
+        data = json.loads(data)
+
+    map_url_list = data['slices']
+    map_size = data['total_size']
+    map_padding = data['padding']
+    x, y = [0, 0]
+    map_back = Image.new('RGB', map_size)
+    for w in range(len(map_url_list)):
+        x = 0
+        for h in range(len(map_url_list[w])):
+            url = map_url_list[w][h]['url']
+            icon = download_icon(url)
+            map_back.paste(icon, [x, y])
+
+            x += icon.size[0]
+
+        url = map_url_list[w][-1]['url']
+        icon = download_icon(url)
+        y += icon.size[1]
+
+    # map_back = map_back.crop([map_padding[0],
+    #                           map_padding[1],
+    #                           map_size[0] - map_padding[0],
+    #                           map_size[1] - map_padding[1]])
+
+    with open(MAP_PATH, 'wb') as jpg:
+        map_back.save(jpg)
 
 
 def up_icon_image(sublist):
@@ -70,6 +120,7 @@ def up_icon_image(sublist):
     icon_path = os.path.join(FILE_PATH, 'icon', f'{id}.png')
 
     if not os.path.exists(icon_path):
+        print(f'正在更新图标 {id}')
         schedule = request.Request(icon_url)
         schedule.add_header('User-Agent', header)
         with request.urlopen(schedule) as f:
@@ -128,18 +179,30 @@ def up_label_and_point_list():
     data['date'] = time.strftime('%d')
 
 
-# def load_resource_type_id():
-#     with open(os.path.join(FILE_PATH,'resource_id.json'), 'r', encoding='UTF-8') as f:
-#         json_data = json.load(f)
-#         for id in json_data.keys():
-#             data['all_resource_type'][id] = json_data[id]
-#             if json_data[id]['depth'] != 1:
-#                 data['can_query_type_list'][json_data[id]['name']] = id
+def up_map(re_download_map=False):
+    global MAP_IMAGE
+    global MAP_SIZE
+    global CENTER
+
+    if (not os.path.exists(MAP_PATH)) or (re_download_map):
+        update_map_icon()
+
+    MAP_IMAGE = Image.open(MAP_PATH)
+    MAP_SIZE = MAP_IMAGE.size
+
+    schedule = request.Request(MAP_URL)
+    schedule.add_header('User-Agent', header)
+    with request.urlopen(schedule) as f:
+        rew_data = f.read().decode('utf-8')
+        data = json.loads(rew_data)['data']['info']['detail']
+        data = json.loads(data)
+
+    CENTER = data['origin']
 
 
 # 初始化
-# load_resource_type_id()
 up_label_and_point_list()
+up_map()
 
 
 class Resource_map(object):
@@ -183,8 +246,7 @@ class Resource_map(object):
     def paste(self):
         for x, y in self.resource_xy_list:
             # 把资源图片贴到地图上
-            self.map_image.paste(self.resource_icon, (x + resource_icon_offset[0], y + resource_icon_offset[1]),
-                                 self.resource_icon)
+            self.map_image.paste(self.resource_icon, (x + resource_icon_offset[0], y + resource_icon_offset[1]), self.resource_icon)
 
             # 找出4个方向最远的坐标，用于后边裁切
             self.x_start = min(x, self.x_start)
@@ -236,7 +298,7 @@ def get_resource_map_mes(name):
         up_label_and_point_list()
 
     if not (name in data['can_query_type_list']):
-        return f'没有 {name} 这种资源。\n发送 素材资源列表 查看所有资源名称'
+        return f'没有 {name} 这种资源。\n发送 原神资源列表 查看所有资源名称'
 
     map = Resource_map(name)
     count = map.get_resource_count()
@@ -244,9 +306,10 @@ def get_resource_map_mes(name):
     if not count:
         return f'没有找到 {name} 资源的位置，可能米游社wiki还没更新。'
 
-    # mes = f'资源 {name} 的位置如下\n'
-    mes = map.get_cq_cod()
-    mes += f'\n※ {name} 一共找到 {count} 个位置点\n※ 数据来源于米游社wiki'
+    mes = f'资源 {name} 的位置如下\n'
+    mes += map.get_cq_cod()
+
+    mes += f'\n\n※ {name} 一共找到 {count} 个位置点\n※ 数据来源于米游社wiki'
 
     return mes
 
