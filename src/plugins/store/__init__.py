@@ -3,8 +3,9 @@ import os
 from threading import Timer
 
 from nonebot import on_command, on_message
-from nonebot.adapters.cqhttp import GroupMessageEvent, Bot, Message, Event
+from nonebot.adapters.cqhttp import GroupMessageEvent, Bot, Message, Event, ActionFailed
 from nonebot.typing import T_State
+from .parse import get_data
 import src.plugins as cfg
 
 keys = on_command('圣经')
@@ -25,30 +26,30 @@ async def _(bot: Bot, event: GroupMessageEvent):
 
 @save.handle()
 async def _(bot: Bot, event: Event, state: T_State):
-    pair = str(event.get_message()).strip().split(' ', 1)
-    if len(pair) < 2:
-        pair = str(event.get_message()).strip().split('\n', 1)
+    pair = event.get_message()
     if len(pair) < 1:
         await save.finish(message=Message('错误的格式'))
-    state['instruct'] = pair[0].strip()
-    if len(pair) == 2:
-        state['content'] = pair[1]
+    state['instruct'] = str(pair[0]).strip()
+    if len(pair) > 1:
+        state['content'] = pair[1:]
 
 
 @save.got('content', prompt='请发送要记录的数据')
 async def _(bot: Bot, event: Event, state: T_State):
-    # TODO 使用 MessageSegment 检查图片来源为 url 时转码为 base64
     instruct = state['instruct']
-    content = str(state['content']).strip()
     if len(instruct) < 2:
         await save.finish(message='关键词不能太短')
     if any(map(lambda c: c in spec_sym, instruct)):
         await save.finish(message='含有非法关键字')
 
+    msgs = Message(state['content'])
+    content = await get_data(msgs)
+    if content == '':
+        await save.finish(message='解析内容出错')
     file = os.path.join(cfg.STORE_PATH, instruct)
     if os.path.exists(file):
         with open(file, 'r', encoding='utf-8') as f:
-            content += base64.b64decode(f.read()).decode()
+            content = base64.b64decode(f.read()).decode() + content
     try:
         with open(file, 'w', encoding='utf-8') as f:
             data = base64.b64encode(content.encode()).decode()
@@ -97,7 +98,10 @@ async def _(bot: Bot, event: Event):
                 Timer(cd, allow_chat).start()
                 with open(file, 'r', encoding='utf-8') as f:
                     data = base64.b64decode(f.read()).decode()
-                await load.finish(message=Message(data))
+                try:
+                    await load.finish(message=Message(data))
+                except ActionFailed:
+                    print(data)
 
 
 def allow_chat():

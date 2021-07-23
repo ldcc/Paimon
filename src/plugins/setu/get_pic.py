@@ -1,6 +1,5 @@
 import base64
 import io
-import os
 import random
 
 from PIL import Image, ImageDraw
