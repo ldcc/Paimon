@@ -144,7 +144,3 @@ dmypy.json
 cqhttp/data
 cqhttp/config.hjson
 
-src/plugins/genshin/icon/*.png
-!src/plugins/genshin/icon/0.png
-!src/plugins/genshin/icon/box.png
-!src/plugins/genshin/icon/box_alpha.png
