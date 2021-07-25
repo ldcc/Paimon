@@ -17,6 +17,7 @@ FILE_PATH = os.path.dirname(__file__)
 MAP_PATH = os.path.join(FILE_PATH, 'icon', 'map_icon.jpg')
 
 # 这3个常量放在up_map()函数里更新
+Image.MAX_IMAGE_PIXELS = None
 MAP_IMAGE = None
 MAP_SIZE = None
 CENTER = None
@@ -209,6 +210,7 @@ class ResourceMap(object):
 
     def __init__(self, resource_name):
         self.resource_id = str(data['can_query_type_list'][resource_name])
+        print(self.resource_id)
 
         # 地图要要裁切的左上角和右下角坐标
         # 这里初始化为地图的大小
@@ -216,6 +218,7 @@ class ResourceMap(object):
         self.y_start = MAP_SIZE[1]
         self.x_end = 0
         self.y_end = 0
+        print(self.x_start, self.y_start, self.x_end, self.y_end)
 
         self.map_image = MAP_IMAGE.copy()
 
@@ -228,7 +231,6 @@ class ResourceMap(object):
         self.resource_xy_list = self.get_resource_point_list()
 
     def get_icon_path(self):
-        print(self.resource_id)
         # 检查有没有图标，有返回正确图标，没有返回默认图标
         icon_path = os.path.join(FILE_PATH, 'icon', f'{self.resource_id}.png')
 
