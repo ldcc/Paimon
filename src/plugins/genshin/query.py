@@ -205,7 +205,7 @@ up_label_and_point_list()
 up_map()
 
 
-class Resource_map(object):
+class ResourceMap(object):
 
     def __init__(self, resource_name):
         self.resource_id = str(data['can_query_type_list'][resource_name])
@@ -219,12 +219,16 @@ class Resource_map(object):
 
         self.map_image = MAP_IMAGE.copy()
 
+        print('1')
         self.resource_icon = Image.open(self.get_icon_path())
+        print('2')
         self.resource_icon = self.resource_icon.resize((int(150 * zoom), int(150 * zoom)))
+        print('3')
 
         self.resource_xy_list = self.get_resource_point_list()
 
     def get_icon_path(self):
+        print(self.resource_id)
         # 检查有没有图标，有返回正确图标，没有返回默认图标
         icon_path = os.path.join(FILE_PATH, 'icon', f'{self.resource_id}.png')
 
@@ -246,7 +250,8 @@ class Resource_map(object):
     def paste(self):
         for x, y in self.resource_xy_list:
             # 把资源图片贴到地图上
-            self.map_image.paste(self.resource_icon, (x + resource_icon_offset[0], y + resource_icon_offset[1]), self.resource_icon)
+            self.map_image.paste(self.resource_icon, (x + resource_icon_offset[0], y + resource_icon_offset[1]),
+                                 self.resource_icon)
 
             # 找出4个方向最远的坐标，用于后边裁切
             self.x_start = min(x, self.x_start)
@@ -301,7 +306,7 @@ def get_resource_map_mes(name):
         return f'没有 {name} 这种资源。\n发送 原神资源列表 查看所有资源名称'
 
     print('ready')
-    rmap = Resource_map(name)
+    rmap = ResourceMap(name)
     print(rmap)
     count = rmap.get_resource_count()
     print(count)
