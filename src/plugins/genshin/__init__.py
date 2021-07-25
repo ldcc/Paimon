@@ -13,10 +13,11 @@ map_refre = on_command('更新原神地图', rule=to_me())
 @res_pot.handle()
 async def _(bot: Bot, event: Event):
     res = event.get_message().extract_plain_text().strip()
-    if res == "":
+    if res == '':
         return
 
     msg = get_resource_map_mes(res)
+    print(msg)
     await res_pot.finish(message=Message(msg))
 
 

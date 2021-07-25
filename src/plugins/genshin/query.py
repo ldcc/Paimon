@@ -300,15 +300,15 @@ def get_resource_map_mes(name):
     if not (name in data['can_query_type_list']):
         return f'没有 {name} 这种资源。\n发送 原神资源列表 查看所有资源名称'
 
-    map = Resource_map(name)
-    count = map.get_resource_count()
+    rmap = Resource_map(name)
+    count = rmap.get_resource_count()
+    print(count)
 
     if not count:
         return f'没有找到 {name} 资源的位置，可能米游社wiki还没更新。'
 
     mes = f'资源 {name} 的位置如下\n'
-    mes += map.get_cq_cod()
-
+    mes += rmap.get_cq_cod()
     mes += f'\n\n※ {name} 一共找到 {count} 个位置点\n※ 数据来源于米游社wiki'
 
     return mes
