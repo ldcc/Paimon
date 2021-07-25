@@ -189,10 +189,7 @@ def up_map(re_download_map=False):
         update_map_icon()
 
     MAP_IMAGE = Image.open(MAP_PATH)
-    print(MAP_IMAGE)
     MAP_SIZE = MAP_IMAGE.size
-    a = MAP_IMAGE.copy()
-    print(a)
 
     schedule = request.Request(MAP_URL)
     schedule.add_header('User-Agent', header)
@@ -308,9 +305,8 @@ def get_resource_map_mes(name):
     if not count:
         return f'没有找到 {name} 资源的位置，可能米游社wiki还没更新。'
 
-    mes = f'资源 {name} 的位置如下\n'
-    mes += rmap.get_cq_cod()
-    mes += f'\n\n※ {name} 一共找到 {count} 个位置点\n※ 数据来源于米游社wiki'
+    mes = rmap.get_cq_cod()
+    mes += f'\n※ {name} 一共找到 {count} 个位置点\n'
 
     return mes
 
