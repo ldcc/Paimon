@@ -300,7 +300,9 @@ def get_resource_map_mes(name):
     if not (name in data['can_query_type_list']):
         return f'没有 {name} 这种资源。\n发送 原神资源列表 查看所有资源名称'
 
+    print('ready')
     rmap = Resource_map(name)
+    print(rmap)
     count = rmap.get_resource_count()
     print(count)
 
