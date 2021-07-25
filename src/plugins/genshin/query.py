@@ -189,7 +189,10 @@ def up_map(re_download_map=False):
         update_map_icon()
 
     MAP_IMAGE = Image.open(MAP_PATH)
+    print(MAP_IMAGE)
     MAP_SIZE = MAP_IMAGE.size
+    a = MAP_IMAGE.copy()
+    print(a)
 
     schedule = request.Request(MAP_URL)
     schedule.add_header('User-Agent', header)
