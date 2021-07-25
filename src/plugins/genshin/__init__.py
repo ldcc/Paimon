@@ -17,7 +17,6 @@ async def _(bot: Bot, event: Event):
         return
 
     msg = get_resource_map_mes(res)
-    print(msg)
     await res_pot.finish(message=Message(msg))
 
 

@@ -18,9 +18,9 @@ MAP_PATH = os.path.join(FILE_PATH, 'icon', 'map_icon.jpg')
 
 # 这3个常量放在up_map()函数里更新
 Image.MAX_IMAGE_PIXELS = None
-MAP_IMAGE = None
-MAP_SIZE = None
-CENTER = None
+MAP_IMAGE = Image.Image()
+MAP_SIZE = (0, 0)
+CENTER = [0, 0]
 
 zoom = 0.75
 resource_icon_offset = (-int(150 * 0.5 * zoom), -int(150 * zoom))
@@ -210,7 +210,6 @@ class ResourceMap(object):
 
     def __init__(self, resource_name):
         self.resource_id = str(data['can_query_type_list'][resource_name])
-        print(self.resource_id)
 
         # 地图要要裁切的左上角和右下角坐标
         # 这里初始化为地图的大小
@@ -218,16 +217,10 @@ class ResourceMap(object):
         self.y_start = MAP_SIZE[1]
         self.x_end = 0
         self.y_end = 0
-        print(self.x_start, self.y_start, self.x_end, self.y_end)
 
         self.map_image = MAP_IMAGE.copy()
-
-        print('1')
         self.resource_icon = Image.open(self.get_icon_path())
-        print('2')
         self.resource_icon = self.resource_icon.resize((int(150 * zoom), int(150 * zoom)))
-        print('3')
-
         self.resource_xy_list = self.get_resource_point_list()
 
     def get_icon_path(self):
@@ -307,12 +300,8 @@ def get_resource_map_mes(name):
     if not (name in data['can_query_type_list']):
         return f'没有 {name} 这种资源。\n发送 原神资源列表 查看所有资源名称'
 
-    print('ready')
     rmap = ResourceMap(name)
-    print(rmap)
     count = rmap.get_resource_count()
-    print(count)
-
     if not count:
         return f'没有找到 {name} 资源的位置，可能米游社wiki还没更新。'
 
