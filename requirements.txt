@@ -2,7 +2,7 @@ nb-cli
 nonebot2
 nonebot-adapter-cqhttp
 nonebot-plugin-apscheduler
-Pillow==8.3.1
+Pillow==8.2.0
 xpinyin~=0.7.6
 beautifulsoup4~=4.9.3
 lxml>=4.6.3
