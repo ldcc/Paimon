@@ -305,10 +305,7 @@ def get_resource_map_mes(name):
     if not count:
         return f'没有找到 {name} 资源的位置，可能米游社wiki还没更新。'
 
-    mes = rmap.get_cq_cod()
-    mes += f'\n※ {name} 一共找到 {count} 个位置点\n'
-
-    return mes
+    return rmap.get_cq_cod()
 
 
 def get_resource_list_mes():
