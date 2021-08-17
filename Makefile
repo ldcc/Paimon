@@ -6,7 +6,7 @@ $(app): abort-$(app)
 	docker run -dp 0.0.0.0:6000:6000 \
 				-v $(PWD)/src/data/store:/app/src/data/store \
 				-v $(PWD)/src/data/auth:/app/src/data/auth \
-				--name $(app) $(app):latest
+				--dns 8.8.8.8 --name $(app) $(app):latest
 cqhttp: abort-cqhttp
 	cd cqhttp && \
 	chmod +x $(cqhttp) && \
