@@ -8,4 +8,4 @@ lxml>=4.6.3
 requests~=2.25.1
 MsgPack>=1.0.2
 ujson>=4.0.2
-httpx==0.17.1
+httpx>=0.18.0
