@@ -26,7 +26,7 @@ commit:
 upgrade:
 	make commit
 	if [ -z "`docker images | grep python | grep $(py_ver)`" ]; then docker pull python:$(py_ver); fi
-	docker build -t $(app):latest .
+	docker build  --network host -t $(app):latest .
 	make start
 
 abort: abort-cqhttp abort-$(app)
