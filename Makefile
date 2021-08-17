@@ -1,6 +1,6 @@
 app=lemon
 cqhttp=go-cqhttp
-export py_ver=3.8
+export py_ver=3.9
 
 $(app): abort-$(app)
 	docker run -dp 0.0.0.0:6000:6000 \
