@@ -6,7 +6,7 @@ $(app): abort-$(app)
 	docker run -dp 0.0.0.0:6000:6000 \
 				-v $(PWD)/src/data/store:/app/src/data/store \
 				-v $(PWD)/src/data/auth:/app/src/data/auth \
-				--dns 8.8.8.8 --name $(app) $(app):latest
+				--name $(app) $(app):latest
 cqhttp: abort-cqhttp
 	cd cqhttp && \
 	chmod +x $(cqhttp) && \
@@ -26,7 +26,7 @@ commit:
 upgrade:
 	make commit
 	if [ -z "`docker images | grep python | grep $(py_ver)`" ]; then docker pull python:$(py_ver); fi
-	docker build  --network host -t $(app):latest .
+	docker build -t $(app):latest .
 	make start
 
 abort: abort-cqhttp abort-$(app)
