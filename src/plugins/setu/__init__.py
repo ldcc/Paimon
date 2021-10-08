@@ -7,6 +7,7 @@ from nonebot.adapters.cqhttp import Bot, MessageSegment, GroupMessageEvent, Acti
 from .get_pic import setu_pic, anti_harmonious
 import src.plugins as cfg
 
+search = on_command('搜图')
 setu = on_command('setu', aliases={'无内鬼', '涩图', '色图', '瑟图'})
 RETRY = 3
 
@@ -39,3 +40,9 @@ async def _(bot: Bot, event: GroupMessageEvent):
                 await setu.send(message=MessageSegment.image(pic))
     finally:
         await setu.finish()
+
+
+# 搜图
+@search.handle()
+async def _(bot: Bot, event: GroupMessageEvent):
+    pass
