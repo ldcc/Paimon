@@ -2,7 +2,8 @@ import base64
 import os.path
 
 from nonebot import on_command
-from nonebot.adapters.cqhttp import Bot, MessageSegment, GroupMessageEvent, ActionFailed
+from nonebot.adapters.cqhttp import Bot, MessageSegment, GroupMessageEvent, ActionFailed, T_
+from nonebot.typing import T_State
 
 from .get_pic import setu_pic, anti_harmonious
 import src.plugins as cfg
@@ -44,5 +45,10 @@ async def _(bot: Bot, event: GroupMessageEvent):
 
 # 搜图
 @search.handle()
-async def _(bot: Bot, event: GroupMessageEvent):
+async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
+    pass
+
+
+@search.got()
+async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     pass
