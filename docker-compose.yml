@@ -1,16 +1,16 @@
-lemon:
-  # 其他配置参考 https://hub.docker.com/r/tiangolo/uvicorn-gunicorn-fastapi/
-  build: .
-  restart: always
-  image: lemon:latest
-  container_name: lemon
-  volumes:
-    - "${PWD}/src/data/store:/app/src/data/store"
-    - "${PWD}/src/data/auth:/app/src/data/auth"
-  ports:
-    - "0.0.0.0:6000:6000" # 映射端口到宿主机 宿主机端口:容器端口
-  env_file:
-    - ".env.prod" # fastapi 使用的环境变量文件
-  environment:
-    - ENVIRONMENT=prod # 配置 nonebot 运行环境，此项会被 .env 文件覆盖
-#    network_mode: bridge
+services:
+  lemon:
+    # 其他配置参考 https://hub.docker.com/r/tiangolo/uvicorn-gunicorn-fastapi/
+    restart: always
+    image: lemon:latest
+    container_name: lemon
+    volumes:
+      - "${PWD}/src/data/store:/app/src/data/store"
+      - "${PWD}/src/data/auth:/app/src/data/auth"
+    ports:
+      - "0.0.0.0:6000:6000" # 映射端口到宿主机 宿主机端口:容器端口
+    env_file:
+      - ".env.prod" # fastapi 使用的环境变量文件
+    environment:
+      - ENVIRONMENT=prod # 配置 nonebot 运行环境，此项会被 .env 文件覆盖
+  #    network_mode: bridge

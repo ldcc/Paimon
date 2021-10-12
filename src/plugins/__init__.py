@@ -12,9 +12,23 @@ managers = dict()
 supersuers = set()
 ls = set()
 apikeys = []
+snao_apikey = ""
 
 IMAGE_PATH = r'./src/data/images'
 STORE_PATH = r'./src/data/store'
+
+
+@driver.on_bot_connect
+async def _(bot: Bot):
+    global bot_info, managers, group_switcher, supersuers, ls, apikeys, snao_apikey
+    default_switcher_map['proxy'] = driver.config.setu_proxy
+    bot_info = await bot.get_login_info()
+    managers = await load_manager()
+    group_switcher = await load_switcher()
+    supersuers = driver.config.superusers
+    ls = set(os.listdir(STORE_PATH))
+    apikeys = driver.config.apikeys
+    snao_apikey = driver.config.snao_apikey
 
 
 async def stash_ls(v):
@@ -36,18 +50,6 @@ async def reset_apikeys_default():
     apikeys = driver.config.apikeys
 
 
-@driver.on_bot_connect
-async def _(bot: Bot):
-    global bot_info, supersuers, managers, group_switcher, apikeys, ls
-    bot_info = await bot.get_login_info()
-    managers = await load_manager()
-    group_switcher = await load_switcher()
-    supersuers = driver.config.superusers
-    apikeys = driver.config.apikeys
-    default_switcher_map['proxy'] = driver.config.setu_proxy
-    ls = set(os.listdir(STORE_PATH))
-
-
 def format_group_message(msg_pairs: dict, user_id=None):
     nodes = []
     user_name = '纯路人'
@@ -55,7 +57,7 @@ def format_group_message(msg_pairs: dict, user_id=None):
         user_id = bot_info['user_id']
         user_name = bot_info['nickname']
     for key, data in msg_pairs.items():
-        data1 = {
+        node1 = {
             'type': 'node',
             'data': {
                 'uin': str(user_id),
@@ -63,9 +65,9 @@ def format_group_message(msg_pairs: dict, user_id=None):
                 'content': key
             }
         }
-        nodes.append(data1)
+        nodes.append(node1)
         if data:
-            data2 = {
+            node2 = {
                 'type': 'node',
                 'data': {
                     'uin': str(bot_info['user_id']),
@@ -73,7 +75,7 @@ def format_group_message(msg_pairs: dict, user_id=None):
                     'content': data
                 }
             }
-            nodes.append(data2)
+            nodes.append(node2)
     return nodes
 
 

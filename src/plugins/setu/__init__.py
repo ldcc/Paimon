@@ -1,14 +1,16 @@
 import base64
 import os.path
 
+from PicImageSearch import AsyncSauceNAO, AsyncTraceMoe, AsyncAscii2D, AsyncGoogle, NetWork
 from nonebot import on_command
-from nonebot.adapters.cqhttp import Bot, MessageSegment, GroupMessageEvent, ActionFailed, T_
+from nonebot.adapters.cqhttp import Bot, MessageSegment, GroupMessageEvent, ActionFailed, Message
 from nonebot.typing import T_State
 
 from .get_pic import setu_pic, anti_harmonious
+from .parse import format_data
 import src.plugins as cfg
 
-search = on_command('搜图')
+search = on_command('搜图', aliases={'搜番', '搜名场景', '识图'})
 setu = on_command('setu', aliases={'无内鬼', '涩图', '色图', '瑟图'})
 RETRY = 3
 
@@ -46,9 +48,30 @@ async def _(bot: Bot, event: GroupMessageEvent):
 # 搜图
 @search.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    pass
+    pic = event.get_message()
+    if pic:
+        state['pic'] = pic
+    state['cmd'] = state["_prefix"]["raw_command"]
 
 
-@search.got()
+@search.got('pic', prompt='请发送要搜索的图片')
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    pass
+    engine = None
+    apikey = ""
+    re = MessageSegment.text("无法识别图片")
+    if state['cmd'] == '搜图':
+        engine = AsyncAscii2D
+    elif state['cmd'] == '搜番':
+        engine = AsyncTraceMoe.search()
+    elif state['cmd'] == '搜名场景':
+        engine = AsyncSauceNAO
+        apikey = cfg.snao_apikey
+    elif state['cmd'] == '识图':
+        engine = AsyncGoogle
+    pic = Message(state['pic']).pop()
+    if pic.type == 'image':
+        url = pic.data['url']
+        async with NetWork() as client:
+            session = engine(api_key=apikey, client=client)
+            re = format_data(await session.search(url))
+    await search.finish(re)

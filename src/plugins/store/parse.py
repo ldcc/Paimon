@@ -7,7 +7,7 @@ from nonebot.adapters.cqhttp import Message, MessageSegment
 async def get_data(msgs: Message) -> str:
     data = ''
     for seg in msgs:
-        seg = MessageSegment.copy(seg)
+        seg: MessageSegment
         if seg.type == 'image':
             url = seg.data['url']
             async with AsyncClient() as client:
