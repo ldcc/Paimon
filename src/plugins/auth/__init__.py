@@ -11,7 +11,7 @@ import src.plugins as cfg
 auths = 'allow - 允许管理员权限\ndenies - 撤销管理员权限'
 set_auth = on_command('管理员设置', rule=to_me(), permission=SUPERUSER)
 
-features = '- 色图\n- 防撤回\n- 戳一戳\n- 偷闪照'
+features = '- 防撤回\n- 戳一戳\n- 偷闪照'
 switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'})
 switch_off = on_command('功能关闭', aliases={'关闭功能'})
 
@@ -21,7 +21,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     msg = state["_prefix"]["command_arg"]
     if len(msg) == 0:
         await set_auth.finish(message=f'格式错误，参考输出\n{auths}')
-    pair = str(msg).split(' ', 1)
+    pair = str(msg).strip().split(' ', 1)
     if str(pair[0]) == "allow":
         state['auth'] = True
     elif str(pair[0]) == "denies":
@@ -43,9 +43,9 @@ async def _(bot: Bot, state: T_State):
 @switch_on.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     if str(event.user_id) in cfg.managers:
-        key = event.get_message()
-        if len(key) > 1:
-            state['switch_on'] = key[1]
+        key = state["_prefix"]["command_arg"]
+        if len(key) > 0:
+            state['switch_on'] = key[0]
     else:
         await switch_on.finish('你没有该权限')
 
@@ -61,9 +61,9 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 
 @switch_off.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    key = event.get_message()
-    if key:
-        state['switch_off'] = key
+    key = state["_prefix"]["command_arg"]
+    if len(key) > 0:
+        state['switch_off'] = key[0]
 
 
 @switch_off.got('switch_off', prompt=f'请输入要关闭的功能：\n{features}')
