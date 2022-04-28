@@ -1,7 +1,7 @@
 import base64
 
 from httpx import AsyncClient
-from nonebot.adapters.cqhttp import Message, MessageSegment
+from nonebot.adapters.onebot.v11 import Message, MessageSegment
 
 
 async def get_data(msgs: Message) -> str:

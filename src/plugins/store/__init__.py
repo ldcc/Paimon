@@ -3,12 +3,13 @@ import os
 from threading import Timer
 
 from nonebot import on_command, on_message
-from nonebot.adapters.cqhttp import GroupMessageEvent, Bot, Message, Event, ActionFailed
+from nonebot.adapters.onebot.v11 import GroupMessageEvent, Bot, Message, Event, ActionFailed
 from nonebot.typing import T_State
+from nonebot.rule import to_me
 from .parse import get_data
 import src.plugins as cfg
 
-keys = on_command('圣经')
+keys = on_command('圣经', rule=to_me())
 save = on_command('记录')
 drop = on_command('删除记录', aliases={'删除圣经'})
 load = on_message(priority=10)

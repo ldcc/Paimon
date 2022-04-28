@@ -2,7 +2,7 @@ import json
 import os
 
 from nonebot import get_driver
-from nonebot.adapters.cqhttp.bot import Bot
+from nonebot.adapters.onebot.v11.bot import Bot
 
 driver = get_driver()
 default_switcher_map = {'色图': False, '防撤回': False, '戳一戳': True, '偷闪照': True, 'r18': False, 'proxy': False}

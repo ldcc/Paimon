@@ -4,7 +4,7 @@ import random
 
 from PIL import Image, ImageDraw
 from httpx import AsyncClient
-from nonebot.adapters.cqhttp.message import MessageSegment
+from nonebot.adapters.onebot.v11.message import MessageSegment
 import src.plugins as cfg
 
 

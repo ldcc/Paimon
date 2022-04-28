@@ -1,9 +1,9 @@
 import base64
 import os.path
 
-from PicImageSearch import AsyncSauceNAO, AsyncTraceMoe, AsyncAscii2D, AsyncGoogle, NetWork
+from PicImageSearch import SauceNAO, TraceMoe, Ascii2D, Google, Network
 from nonebot import on_command
-from nonebot.adapters.cqhttp import Bot, MessageSegment, GroupMessageEvent, ActionFailed, Message
+from nonebot.adapters.onebot.v11 import Bot, MessageSegment, GroupMessageEvent, ActionFailed, Message
 from nonebot.typing import T_State
 
 from .get_pic import setu_pic, anti_harmonious
@@ -60,18 +60,18 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     apikey = ""
     re = MessageSegment.text("无法识别图片")
     if state['cmd'] == '搜图':
-        engine = AsyncAscii2D
+        engine = Ascii2D
     elif state['cmd'] == '搜番':
-        engine = AsyncTraceMoe.search()
+        engine = TraceMoe
     elif state['cmd'] == '搜名场景':
-        engine = AsyncSauceNAO
+        engine = SauceNAO
         apikey = cfg.snao_apikey
     elif state['cmd'] == '识图':
-        engine = AsyncGoogle
+        engine = Google
     pic = Message(state['pic']).pop()
     if pic.type == 'image':
         url = pic.data['url']
-        async with NetWork() as client:
+        async with Network() as client:
             session = engine(api_key=apikey, client=client)
             re = format_data(await session.search(url))
     await search.finish(re)

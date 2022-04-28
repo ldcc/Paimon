@@ -1,10 +1,9 @@
 from random import choice
 
 from nonebot import on_notice, on_message
-from nonebot.adapters.cqhttp.bot import Bot
-from nonebot.adapters.cqhttp.message import Message
-from nonebot.adapters.cqhttp.event import GroupMessageEvent, \
-    FriendRecallNoticeEvent, PokeNotifyEvent, GroupRecallNoticeEvent
+from nonebot.adapters.onebot.v11.bot import Bot
+from nonebot.adapters.onebot.v11.message import Message
+from nonebot.adapters.onebot.v11.event import GroupMessageEvent, FriendRecallNoticeEvent, PokeNotifyEvent, GroupRecallNoticeEvent
 from nonebot.rule import to_me
 
 import src.plugins as cfg
@@ -22,8 +21,8 @@ async def _(bot: Bot, event: GroupRecallNoticeEvent):
         return
     mid = event.message_id
     msg = await bot.get_msg(message_id=mid)
-    if event.user_id != event.self_id and ',type=flash' not in msg['raw_message']:
-        re = '刚刚说了:\n' + msg['raw_message']
+    if event.user_id != event.self_id and ',type=flash' not in msg['message']:
+        re = '刚刚说了:\n' + msg['message']
         await recall.finish(message=Message(re), at_sender=True)
 
 
@@ -32,8 +31,8 @@ async def _(bot: Bot, event: GroupRecallNoticeEvent):
 async def _(bot: Bot, event: FriendRecallNoticeEvent):
     mid = event.message_id
     msg = await bot.get_msg(message_id=mid)
-    if event.user_id != event.self_id and 'type=flash,' not in msg['raw_message']:
-        re = '刚刚说了:' + msg['raw_message']
+    if event.user_id != event.self_id and 'type=flash,' not in msg['message']:
+        re = '刚刚说了:' + msg['message']
         await recall.finish(message=Message(re))
 
 
@@ -45,8 +44,7 @@ async def _(bot: Bot, event: PokeNotifyEvent) -> None:
         return
     msg = choice([
         '你再戳！', '？再戳试试？', '别戳了别戳了再戳就坏了555', '我爪巴爪巴，球球别再戳了', '你戳你🐎呢？！',
-        '那...那里...那里不能戳...绝对...', '(。´・ω・)ん?', '有事恁叫我，别天天一个劲戳戳戳！', '欸很烦欸！',
-        '?', '差不多得了😅', '这好吗？这不好！', '我希望你耗子尾汁'
+        '那...那里...那里不能戳...绝对...', '欸很烦欸！', '?', '差不多得了😅', '这好吗？这不好！', '我希望你耗子尾汁'
     ])
     await poke.finish(msg, at_sender=True)
 

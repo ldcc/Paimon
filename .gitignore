@@ -143,4 +143,5 @@ dmypy.json
 .idea/
 cqhttp/data
 cqhttp/config.hjson
-
+cqhttp/config.yml
+cqhttp/session.token

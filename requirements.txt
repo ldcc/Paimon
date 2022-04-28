@@ -1,6 +1,6 @@
 nb-cli
 nonebot2
-nonebot-adapter-cqhttp
+nonebot-adapter-qqguild
 Pillow
 xpinyin
 beautifulsoup4
