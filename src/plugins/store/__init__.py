@@ -27,7 +27,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
 
 @save.handle()
 async def _(bot: Bot, event: Event, state: T_State):
-    pair = event.get_message()
+    pair = state["_prefix"]["command_arg"]
     if len(pair) < 1:
         await save.finish(message=Message('错误的格式'))
     state['instruct'] = str(pair[0]).strip()
@@ -63,7 +63,7 @@ async def _(bot: Bot, event: Event, state: T_State):
 
 @drop.handle()
 async def _(bot: Bot, event: Event, state: T_State):
-    instructs = event.get_message()
+    instructs = state["_prefix"]["command_arg"]
     if instructs:
         state['instructs'] = instructs
 
@@ -88,10 +88,10 @@ async def _(bot: Bot, event: Event, state: T_State):
 
 
 @load.handle()
-async def _(bot: Bot, event: Event):
+async def _(bot: Bot, event: Event, state: T_State):
     global chat
     if chat:
-        msg = str(event.get_message()).strip()
+        msg = str(state["_prefix"]["command_arg"]).strip()
         for instruct in cfg.ls:
             file = os.path.join(cfg.STORE_PATH, instruct)
             if instruct in msg and os.path.exists(file):

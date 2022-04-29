@@ -11,7 +11,7 @@ import src.plugins as cfg
 auths = 'allow - 允许管理员权限\ndenies - 撤销管理员权限'
 set_auth = on_command('管理员设置', rule=to_me(), permission=SUPERUSER)
 
-features = '- 防撤回\n- 戳一戳\n- 偷闪照'
+features = '- 防撤回\n- 戳一戳\n- 偷闪照\n- proxy'
 switch_on = on_command('功能开启', aliases={'功能启动', '启动功能', '开启功能'})
 switch_off = on_command('功能关闭', aliases={'关闭功能'})
 

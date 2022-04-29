@@ -17,11 +17,11 @@ RETRY = 3
 
 # 涩图
 @setu.handle()
-async def _(bot: Bot, event: GroupMessageEvent):
+async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     switch_map = cfg.check_switcher(event.group_id, '色图')
     if len(switch_map) == 0:
         return
-    key = str(event.get_message()).strip()
+    key = state["_prefix"]["command_arg"]
     mseg = await setu_pic(key, switch_map['r18'], switch_map['proxy'])
     try:
         await setu.send(message=mseg)
@@ -48,7 +48,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
 # 搜图
 @search.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    pic = event.get_message()
+    pic = state["_prefix"]["command_arg"]
     if pic:
         state['pic'] = pic
     state['cmd'] = state["_prefix"]["raw_command"]
