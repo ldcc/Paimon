@@ -144,4 +144,7 @@ dmypy.json
 cqhttp/data
 cqhttp/config.hjson
 cqhttp/config.yml
+cqhttp/device.json
 cqhttp/session.token
+cqhttp/go-cqhttp
+cqhttp/go-cqhttp.exe
