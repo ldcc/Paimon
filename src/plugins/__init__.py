@@ -5,7 +5,7 @@ from nonebot import get_driver
 from nonebot.adapters.onebot.v11.bot import Bot
 
 driver = get_driver()
-default_switcher_map = {'色图': False, '防撤回': True, '戳一戳': True, '偷闪照': True, 'r18': False, 'proxy': False}
+default_switcher_map = {'色图': False, '防撤回': True, '戳一戳': False, '偷闪照': True, 'r18': False, 'proxy': False}
 group_switcher = dict()
 bot_info = dict()
 managers = dict()

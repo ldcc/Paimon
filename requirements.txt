@@ -1,6 +1,7 @@
 nb-cli
 nonebot2
 nonebot-adapter-qqguild
+nonebot-adapter-onebot
 Pillow
 xpinyin
 beautifulsoup4
@@ -8,5 +9,5 @@ lxml
 requests
 MsgPack
 ujson
-httpx
+httpx==0.18.0
 PicImageSearch
