@@ -2,8 +2,9 @@ from random import choice
 
 from nonebot import on_notice, on_message
 from nonebot.adapters.onebot.v11.bot import Bot
-from nonebot.adapters.onebot.v11.message import Message
-from nonebot.adapters.onebot.v11.event import GroupMessageEvent, FriendRecallNoticeEvent, PokeNotifyEvent, GroupRecallNoticeEvent
+from nonebot.adapters.onebot.v11.message import Message, MessageSegment
+from nonebot.adapters.onebot.v11.event import GroupMessageEvent, FriendRecallNoticeEvent, PokeNotifyEvent, \
+    GroupRecallNoticeEvent
 from nonebot.rule import to_me
 
 import src.plugins as cfg
@@ -16,14 +17,17 @@ flashimg = on_message(priority=10)
 # 群聊撤回
 @recall.handle()
 async def _(bot: Bot, event: GroupRecallNoticeEvent):
-    switch_map = cfg.check_switcher(event.group_id, '防撤回')
-    if len(switch_map) == 0:
+    msg = await bot.get_msg(message_id=event.message_id)
+    if event.user_id == event.self_id or ',type=flash' in msg['message']:
         return
-    mid = event.message_id
-    msg = await bot.get_msg(message_id=mid)
-    if event.user_id != event.self_id and ',type=flash' not in msg['message']:
-        re = '刚刚说了:\n' + msg['message']
-        await recall.finish(message=Message(re), at_sender=True)
+    msg_list = [
+        MessageSegment.node_custom(cfg.bot_info['user_id'], cfg.bot_info['nickname'], f'群{event.group_id}检测到撤回消息'),
+        MessageSegment.node(event.message_id)]
+    await bot.send_group_forward_msg(group_id=cfg.center_group_id, messages=Message(msg_list))
+
+    switch_map = cfg.check_switcher(event.group_id, '防撤回')
+    if len(switch_map) != 0:
+        await recall.finish(message=Message('刚刚说了:\n' + msg['message']), at_sender=True)
 
 
 # 私聊撤回
@@ -49,13 +53,16 @@ async def _(bot: Bot, event: PokeNotifyEvent) -> None:
     await poke.finish(msg, at_sender=True)
 
 
-# 闪照
+# 偷闪照
 @flashimg.handle()
 async def _(bot: Bot, event: GroupMessageEvent):
-    switch_map = cfg.check_switcher(event.group_id, '偷闪照')
-    if len(switch_map) == 0:
-        return
     msg = str(event.get_message())
-    if ',type=flash' in msg:
-        msg = msg.replace(',type=flash', '')
+    if ',type=flash' not in msg:
+        return
+    msg = msg.replace(',type=flash', '')
+    msg_list = cfg.format_group_message({msg: f'群{event.group_id}检测到闪照'}, event.sender.user_id, event.sender.nickname)
+    await bot.send_group_forward_msg(group_id=cfg.center_group_id, messages=Message(msg_list))
+
+    switch_map = cfg.check_switcher(event.group_id, '偷闪照')
+    if len(switch_map) != 0:
         await flashimg.finish(message=Message('不要发闪照，好东西就要大家一起分享。' + msg), at_sender=True)

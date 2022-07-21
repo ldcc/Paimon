@@ -2,17 +2,19 @@ import json
 import os
 
 from nonebot import get_driver
+from nonebot.adapters.onebot.v11 import MessageSegment
 from nonebot.adapters.onebot.v11.bot import Bot
 
 driver = get_driver()
-default_switcher_map = {'色图': False, '防撤回': True, '戳一戳': True, '偷闪照': True, 'r18': False, 'proxy': False}
+default_switcher_map = {'色图': False, '防撤回': False, '戳一戳': False, '偷闪照': False, 'r18': False, 'proxy': False}
 group_switcher = dict()
 bot_info = dict()
 managers = dict()
 supersuers = set()
 ls = set()
+center_group_id = 0
 apikeys = []
-snao_apikey = ""
+snao_apikey = ''
 
 IMAGE_PATH = r'./src/data/images'
 STORE_PATH = r'./src/data/store'
@@ -20,13 +22,14 @@ STORE_PATH = r'./src/data/store'
 
 @driver.on_bot_connect
 async def _(bot: Bot):
-    global bot_info, managers, group_switcher, supersuers, ls, apikeys, snao_apikey
+    global bot_info, managers, group_switcher, supersuers, ls, center_group_id, apikeys, snao_apikey
     default_switcher_map['proxy'] = driver.config.setu_proxy
     bot_info = await bot.get_login_info()
     managers = await load_manager()
     group_switcher = await load_switcher()
     supersuers = driver.config.superusers
     ls = set(os.listdir(STORE_PATH))
+    center_group_id = driver.config.center_group_id
     apikeys = driver.config.apikeys
     snao_apikey = driver.config.snao_apikey
 
@@ -50,32 +53,15 @@ async def reset_apikeys_default():
     apikeys = driver.config.apikeys
 
 
-def format_group_message(msg_pairs: dict, user_id=None):
+def format_group_message(msg_pairs: dict, user_id=None, user_name='纯路人'):
     nodes = []
-    user_name = '纯路人'
     if user_id is None:
         user_id = bot_info['user_id']
         user_name = bot_info['nickname']
     for key, data in msg_pairs.items():
-        node1 = {
-            'type': 'node',
-            'data': {
-                'uin': str(user_id),
-                'name': user_name,
-                'content': key
-            }
-        }
-        nodes.append(node1)
+        nodes.append(MessageSegment.node_custom(user_id, user_name, key))
         if data:
-            node2 = {
-                'type': 'node',
-                'data': {
-                    'uin': str(bot_info['user_id']),
-                    'name': bot_info['nickname'],
-                    'content': data
-                }
-            }
-            nodes.append(node2)
+            nodes.append(MessageSegment.node_custom(bot_info['user_id'], bot_info['nickname'], data))
     return nodes
 
 

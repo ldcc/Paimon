@@ -2,7 +2,7 @@ import base64
 import os
 from threading import Timer
 
-from nonebot import on_command, on_message
+from nonebot import on_command, on_message, get_bot
 from nonebot.adapters.onebot.v11 import GroupMessageEvent, Bot, Message, Event, ActionFailed
 from nonebot.typing import T_State
 from nonebot.rule import to_me
@@ -21,8 +21,9 @@ cd = 1  # sec
 @keys.handle()
 async def _(bot: Bot, event: GroupMessageEvent):
     msg_pairs = dict.fromkeys(cfg.ls)
-    mes_list = cfg.format_group_message(msg_pairs)
-    await bot.send_group_forward_msg(group_id=event.group_id, messages=Message(mes_list))
+    msg_list = cfg.format_group_message(msg_pairs)
+    print(msg_list)
+    await bot.send_group_forward_msg(group_id=event.group_id, messages=Message(msg_list))
 
 
 @save.handle()
@@ -38,7 +39,7 @@ async def _(bot: Bot, event: Event, state: T_State):
 @save.got('content', prompt='请发送要记录的数据')
 async def _(bot: Bot, event: Event, state: T_State):
     instruct = state['instruct']
-    if len(instruct) < 2:
+    if len(instruct) < 3:
         await save.finish(message='关键词不能太短')
     if any(map(lambda c: c in spec_sym, instruct)):
         await save.finish(message='含有非法关键字')

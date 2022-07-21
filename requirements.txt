@@ -9,5 +9,5 @@ lxml
 requests
 MsgPack
 ujson
-httpx==0.18.0
+httpx
 PicImageSearch
